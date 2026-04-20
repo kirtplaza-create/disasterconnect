@@ -19,10 +19,11 @@
       <!-- Chat log -->
       <div ref="logRef" class="chat-log">
         <div v-for="(m, i) in messages" :key="i" class="fade-up message-row" :style="{ flexDirection: m.role==='user' ? 'row-reverse':'row' }">
-          <div class="avatar" :style="{ background: m.role==='user' ? '#FF6B35':'#00D4FF' }">
-            {{ m.role === 'user' ? '👤' : '🤖' }}
+          <div class="avatar" :style="{ background: m.role==='user' ? 'var(--color-high)':'var(--color-accent)' }">
+            <User v-if="m.role === 'user'" :size="14" color="white" />
+            <Bot v-else :size="14" color="white" />
           </div>
-          <div class="bubble" :style="m.role==='user' ? 'background:#FF6B3515;border-color:#FF6B3544;' : 'background:#060A0F;border-color:#1A2535;'">
+          <div class="bubble" :style="m.role==='user' ? 'background:color-mix(in srgb, var(--color-high), transparent 91%); border-color:color-mix(in srgb, var(--color-high), transparent 73%);' : 'background:var(--bg-body); border-color:var(--border-color);'">
             <div v-if="m.role === 'ai'" class="ai-label">▸ {{ m.provider }}</div>
             {{ m.text }}
           </div>
@@ -30,7 +31,9 @@
 
         <!-- Thinking indicator -->
         <div v-if="loading" class="message-row">
-          <div class="avatar" style="background:#00D4FF;">🤖</div>
+          <div class="avatar" style="background:var(--color-accent);">
+            <Bot :size="14" color="white" />
+          </div>
           <div class="bubble thinking">
             <span class="thinking-text">{{ thinkingStep }}</span>
             <div v-for="i in 3" :key="i" class="dot" :style="{ animationDelay: (i-1)*0.2+'s' }" />
@@ -45,10 +48,12 @@
           class="chat-input"
           placeholder="Ask the AI anything about the current disaster situation..."
           @keydown.enter="ask()"
-          @focus="e => e.target.style.borderColor='#00D4FF'"
-          @blur="e => e.target.style.borderColor='#1A2535'"
+          @focus="e => e.target.style.borderColor='var(--color-accent)'"
+          @blur="e => e.target.style.borderColor='var(--border-color)'"
         />
-        <button class="btn-primary" :disabled="loading || !input.trim()" @click="ask()">Send ▶</button>
+        <button class="btn-primary" :disabled="loading || !input.trim()" @click="ask()">
+          Send <Send :size="12" style="margin-left: 4px;" />
+        </button>
         <button v-if="messages.length > 0" class="btn-ghost" @click="messages = []">Clear</button>
       </div>
 
@@ -58,6 +63,7 @@
 
 <script setup>
 import { ref, nextTick } from 'vue'
+import { User, Bot, Send } from 'lucide-vue-next'
 import { askAI } from '../services/aiService.js'
 import { AI_CONFIG } from '../config.js'
 
@@ -133,32 +139,32 @@ Date: ${new Date().toLocaleDateString()}`
 .fade-up{animation:fadeUp .4s ease forwards}
 
 .page-wrap{height:calc(100vh - 120px);display:flex;flex-direction:column;}
-.module-label{font-size:10px;color:#00D4FF;font-family:'DM Mono',monospace;letter-spacing:.12em;margin-bottom:4px}
+.module-label{font-size:10px;color:var(--color-accent);font-family:'DM Mono',monospace;letter-spacing:.12em;margin-bottom:4px}
 .page-title{font-size:22px;font-weight:800}
-.page-sub{color:#4A6080;font-size:13px;margin-top:4px}
-.section-label{font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.page-sub{color:var(--text-secondary);font-size:13px;margin-top:4px}
+.section-label{font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
 
-.card{background:#0D1219;border:1px solid #1A2535;border-radius:6px;padding:1.25rem}
+.card{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:6px;padding:1.25rem}
 .chat-card{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 
 .suggestions{margin-bottom:16px;flex-shrink:0}
 .suggestions-wrap{display:flex;flex-wrap:wrap;gap:8px}
-.suggestion-btn{background:#060A0F;border:1px solid #1A2535;color:#4A6080;padding:6px 14px;font-size:12px;border-radius:4px;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif}
-.suggestion-btn:hover{border-color:#00D4FF;color:#00D4FF}
+.suggestion-btn{background:var(--bg-body);border:1px solid var(--border-color);color:var(--text-secondary);padding:6px 14px;font-size:12px;border-radius:4px;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif}
+.suggestion-btn:hover{border-color:var(--color-accent);color:var(--color-accent)}
 
 .chat-log{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding-right:4px;margin-bottom:12px}
 .message-row{display:flex;gap:12px;align-items:flex-start}
 .avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.bubble{max-width:75%;border:1px solid;border-radius:6px;padding:10px 14px;font-size:13px;line-height:1.7;color:#E2EAF4;white-space:pre-wrap}
-.ai-label{font-size:10px;color:#00D4FF;font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px}
+.bubble{max-width:75%;border:1px solid;border-radius:6px;padding:10px 14px;font-size:13px;line-height:1.7;color:var(--text-primary);white-space:pre-wrap}
+.ai-label{font-size:10px;color:var(--color-accent);font-family:'DM Mono',monospace;letter-spacing:.08em;margin-bottom:4px}
 .thinking{display:flex;gap:6px;align-items:center;}
-.dot{width:6px;height:6px;border-radius:50%;background:#00D4FF;animation:pulse 1.4s infinite}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--color-accent);animation:pulse 1.4s infinite}
 
 .input-row{display:flex;gap:8px;flex-shrink:0}
-.chat-input{flex:1;background:#060A0F;border:1px solid #1A2535;border-radius:4px;padding:10px 14px;color:#E2EAF4;font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
-.btn-primary{background:#00D4FF;color:#060A0F;border:none;border-radius:4px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Outfit',sans-serif}
+.chat-input{flex:1;background:var(--bg-body);border:1px solid var(--border-color);border-radius:4px;padding:10px 14px;color:var(--text-primary);font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
+.btn-primary{background:var(--color-accent);color:var(--bg-body);border:none;border-radius:4px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Outfit',sans-serif}
 .btn-primary:hover{opacity:.85}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed}
-.btn-ghost{background:transparent;border:1px solid #1A2535;color:#E2EAF4;border-radius:4px;padding:10px 16px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
-.btn-ghost:hover{border-color:#FF3B5C44;color:#FF3B5C}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+.btn-ghost{background:transparent;border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;padding:10px 16px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.btn-ghost:hover{border-color:var(--color-danger);color:var(--color-danger)}
 </style>

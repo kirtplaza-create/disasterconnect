@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, provide, watch } from 'vue'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { doc, getDoc, collection, onSnapshot } from 'firebase/firestore'
 import { auth, db } from './firebase'
@@ -42,6 +42,26 @@ import DonorPortal    from './DonorPortal.vue'
 
 const session = ref(null)
 const loadingAuth = ref(true)
+
+// THEME MANAGEMENT
+const isLightMode = ref(localStorage.getItem('theme') === 'light')
+
+const toggleTheme = () => {
+  isLightMode.value = !isLightMode.value
+}
+
+watch(isLightMode, (val) => {
+  if (val) {
+    document.body.classList.add('light-mode')
+    localStorage.setItem('theme', 'light')
+  } else {
+    document.body.classList.remove('light-mode')
+    localStorage.setItem('theme', 'dark')
+  }
+}, { immediate: true })
+
+provide('isLightMode', isLightMode)
+provide('toggleTheme', toggleTheme)
 
 // Reactive Database references for the entire app. Eventually synced via onSnapshot
 const residents  = ref([])
@@ -114,10 +134,16 @@ async function handleLogout() {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;600;700;800;900&display=swap');
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #060A0F; color: #E2EAF4; font-family: 'Outfit','Segoe UI',sans-serif; min-height: 100vh; }
+body { 
+  background: var(--bg-body); 
+  color: var(--text-primary); 
+  font-family: 'Outfit','Segoe UI',sans-serif; 
+  min-height: 100vh; 
+  transition: background 0.3s, color 0.3s;
+}
 input, select, textarea, button { font-family: 'Outfit','Segoe UI',sans-serif; outline: none; }
 button { cursor: pointer; }
 ::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:#060A0F}
-::-webkit-scrollbar-thumb{background:#1A2535;border-radius:2px}
+::-webkit-scrollbar-track{background: var(--scrollbar-track)}
+::-webkit-scrollbar-thumb{background: var(--scrollbar-thumb);border-radius:2px}
 </style>

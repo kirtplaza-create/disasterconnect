@@ -157,6 +157,12 @@ export async function askAI(system, prompt) {
 }
 
 export const getStatusColor = (status) => {
-  const map = { 'pending': '#FFD23F', 'approved': '#00D4FF', 'distributed': '#00E5A0', 'rejected': '#FF3B5C', 'critical': '#FF3B5C' }
-  return map[status?.toLowerCase()] || '#4A6080'
+  const map = { 
+    'pending': 'var(--color-warn)', 
+    'approved': 'var(--color-accent)', 
+    'distributed': 'var(--color-success)', 
+    'rejected': 'var(--color-danger)', 
+    'critical': 'var(--color-danger)' 
+  }
+  return map[status?.toLowerCase()] || 'var(--text-secondary)'
 }

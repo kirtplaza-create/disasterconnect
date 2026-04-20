@@ -101,10 +101,12 @@
         <div class="report-body">
           <div class="report-top">
             <span class="report-name">{{ r.brgy }}</span>
-            <span class="badge" :style="badgeStyle('#00D4FF')">{{ r.dtype }}</span>
-            <span v-if="r.aiAnalysis" class="badge" style="background:#00D4FF18;border:1px solid #00D4FF44;color:#00D4FF;">🧠 AI ANALYZED</span>
+            <span class="badge" :style="badgeStyle('var(--color-accent)')">{{ r.dtype }}</span>
+            <span v-if="r.aiAnalysis" class="badge" style="background:color-mix(in srgb, var(--color-accent), transparent 90%); border:1px solid color-mix(in srgb, var(--color-accent), transparent 73%); color:var(--color-accent); display: inline-flex; align-items: center; gap: 4px;">
+              <Brain :size="12" /> AI ANALYZED
+            </span>
             <span class="badge" :style="badgeStyle(statusColor(r.status))">{{ (r.status || 'pending').toUpperCase() }}</span>
-            <span class="report-id" style="margin-left:auto;color:#4A6080;font-size:10px;">{{ r.id }}</span>
+            <span class="report-id" style="margin-left:auto;color:var(--text-secondary);font-size:10px;">{{ r.id }}</span>
           </div>
           <div class="report-meta">
             {{ r.muni }} · {{ (r.individuals || 0).toLocaleString() }} individuals · {{ r.evacuees || 0 }} evacuees · {{ r.date }}
@@ -133,6 +135,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { Brain } from 'lucide-vue-next'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../firebase.js'
 
@@ -143,9 +146,13 @@ const props = defineProps({
 const emit = defineEmits(['navigate'])
 
 // ─── COLOR HELPERS ────────────────────────────────────────────────────────────
-const sevColor    = (s) => ({ Critical: '#FF3B5C', High: '#FF6B35', Moderate: '#FFD23F', Low: '#00E5A0' })[s] || '#4A6080'
-const statusColor = (s) => ({ pending: '#FFD23F', approved: '#00D4FF', distributed: '#00E5A0', rejected: '#FF3B5C' })[s] || '#4A6080'
-const badgeStyle  = (color) => ({ background: color + '18', border: `1px solid ${color}44`, color })
+const sevColor    = (s) => ({ Critical: 'var(--color-danger)', High: 'var(--color-high)', Moderate: 'var(--color-warn)', Low: 'var(--color-success)' })[s] || 'var(--text-secondary)'
+const statusColor = (s) => ({ pending: 'var(--color-warn)', approved: 'var(--color-accent)', distributed: 'var(--color-success)', rejected: 'var(--color-danger)' })[s] || 'var(--text-secondary)'
+const badgeStyle  = (color) => ({ 
+  background: `color-mix(in srgb, ${color}, transparent 90%)`, 
+  border: `1px solid color-mix(in srgb, ${color}, transparent 70%)`, 
+  color 
+})
 
 // ─── FORM STATE ───────────────────────────────────────────────────────────────
 // showForm toggles the new report form open/closed
@@ -216,11 +223,11 @@ async function submitReport() {
 /* ── PAGE HEADER ── */
 .page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
 .page-title  { font-size:22px; font-weight:800; }
-.page-sub    { color:#4A6080; font-size:13px; margin-top:4px; }
+.page-sub    { color:var(--text-secondary); font-size:13px; margin-top:4px; }
 
 /* ── BUTTONS ── */
 .btn-primary {
-  background: #00D4FF; color: #060A0F;
+  background: var(--color-accent); color: var(--bg-body);
   border: none; border-radius: 4px;
   padding: 8px 20px; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: opacity .2s;
@@ -230,41 +237,41 @@ async function submitReport() {
 .btn-primary:hover { opacity: 0.85; }
 
 .btn-ghost {
-  background: transparent; border: 1px solid #1A2535;
-  color: #E2EAF4; border-radius: 4px;
+  background: transparent; border: 1px solid var(--border-color);
+  color: var(--text-primary); border-radius: 4px;
   padding: 8px 20px; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: all .2s;
   font-family: 'Outfit', sans-serif;
   display: inline-flex; align-items: center; gap: 6px;
 }
-.btn-ghost:hover { border-color: #00D4FF44; color: #00D4FF; }
+.btn-ghost:hover { border-color: color-mix(in srgb, var(--color-accent), transparent 73%); color: var(--color-accent); }
 
 /* ── FORM CARD ── */
 .form-card {
-  background: #0D1219;
-  border: 1px solid #00D4FF44;
+  background: var(--bg-surface);
+  border: 1px solid color-mix(in srgb, var(--color-accent), transparent 73%);
   border-radius: 6px;
   padding: 1.25rem;
   margin-bottom: 20px;
 }
-.form-title   { font-size:14px; font-weight:700; color:#00D4FF; margin-bottom:16px; }
+.form-title   { font-size:14px; font-weight:700; color:var(--color-accent); margin-bottom:16px; }
 .form-actions { display:flex; gap:10px; margin-top:8px; }
 
 /* ── FORM FIELDS ── */
 .field        { margin-bottom: 12px; }
 .field-label  {
-  display: block; font-size: 11px; color: #4A6080;
+  display: block; font-size: 11px; color: var(--text-secondary);
   font-family: 'DM Mono', monospace; letter-spacing: 0.08em;
   text-transform: uppercase; margin-bottom: 4px;
 }
 .field-input  {
-  width: 100%; background: #060A0F;
-  border: 1px solid #1A2535; border-radius: 4px;
-  padding: 8px 12px; color: #E2EAF4; font-size: 13px;
+  width: 100%; background: var(--bg-body);
+  border: 1px solid var(--border-color); border-radius: 4px;
+  padding: 8px 12px; color: var(--text-primary); font-size: 13px;
   transition: border-color .2s; font-family: 'Outfit', sans-serif;
   outline: none;
 }
-.field-input:focus   { border-color: #00D4FF; }
+.field-input:focus   { border-color: var(--color-accent); }
 .field-select        { appearance: none; cursor: pointer; }
 .field-textarea      { resize: vertical; }
 
@@ -276,8 +283,8 @@ async function submitReport() {
 .report-list { display: flex; flex-direction: column; gap: 10px; }
 
 .report-card {
-  background: #0D1219;
-  border: 1px solid #1A2535;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 1.25rem;
   display: flex;
@@ -285,7 +292,7 @@ async function submitReport() {
   gap: 16px;
   transition: border-color .2s;
 }
-.report-card:hover { border-color: #1A253588; }
+.report-card:hover { border-color: color-mix(in srgb, var(--border-color), transparent 47%); }
 
 /* Left severity bar */
 .sev-bar  { width: 4px; height: 50px; border-radius: 2px; flex-shrink: 0; }
@@ -294,7 +301,7 @@ async function submitReport() {
 .report-body { flex: 1; }
 .report-top  { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
 .report-name { font-size: 14px; font-weight: 700; }
-.report-meta { font-size: 12px; color: #4A6080; }
+.report-meta { font-size: 12px; color: var(--text-secondary); }
 
 /* Right action area */
 .report-actions { display: flex; gap: 8px; flex-shrink: 0; }
@@ -310,8 +317,8 @@ async function submitReport() {
 /* ── EMPTY STATE ── */
 .empty-state {
   text-align: center; padding: 4rem;
-  color: #4A6080; font-size: 13px;
-  background: #0D1219; border: 1px solid #1A2535;
+  color: var(--text-secondary); font-size: 13px;
+  background: var(--bg-surface); border: 1px solid var(--border-color);
   border-radius: 6px;
 }
 </style>

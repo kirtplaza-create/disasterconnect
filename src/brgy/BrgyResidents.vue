@@ -33,10 +33,10 @@
                     <Check v-if="step > i+1" :size="14" />
                     <span v-else>{{ i+1 }}</span>
                   </div>
-                  <span class="dc-step-lbl" :style="step===i+1?'color:#FFD23F;font-weight:700':'color:#4A6080'">{{ label }}</span>
+                  <span class="dc-step-lbl" :style="step===i+1?'color:var(--color-warn);font-weight:700':'color:var(--text-secondary)'">{{ label }}</span>
                 </div>
                 <div v-if="i < 4" class="dc-step-line"
-                  :style="step > i+2 ? 'background:#FFD23F' : 'background:#1A2535'"></div>
+                  :style="step > i+2 ? 'background:var(--color-warn)' : 'background:var(--border-color)'"></div>
               </template>
             </div>
 
@@ -45,17 +45,17 @@
               <div class="dc-step-title">Step 1: Family Information</div>
 
               <div class="dc-field">
-                <label class="dc-label">FAMILY NAME <span style="color:#FF3B5C">*</span></label>
+                <label class="dc-label">FAMILY NAME <span style="color:var(--color-danger)">*</span></label>
                 <input v-model="form.familyName" placeholder="e.g. HAYA" class="dc-input"
-                  @focus="e=>e.target.style.borderColor='#FFD23F'"
-                  @blur="e=>e.target.style.borderColor='#1A2535'" />
+                  @focus="e=>e.target.style.borderColor='var(--color-warn)'"
+                  @blur="e=>e.target.style.borderColor='var(--border-color)'" />
               </div>
 
               <div class="dc-field">
-                <label class="dc-label">CONTACT NO. OF REPRESENTATIVE <span style="color:#FF3B5C">*</span></label>
+                <label class="dc-label">CONTACT NO. OF REPRESENTATIVE <span style="color:var(--color-danger)">*</span></label>
                 <input v-model="form.contactNo" placeholder="e.g. 09700201422" class="dc-input"
-                  @focus="e=>e.target.style.borderColor='#FFD23F'"
-                  @blur="e=>e.target.style.borderColor='#1A2535'" />
+                  @focus="e=>e.target.style.borderColor='var(--color-warn)'"
+                  @blur="e=>e.target.style.borderColor='var(--border-color)'" />
               </div>
 
               <div class="dc-field">
@@ -63,7 +63,7 @@
                 <div class="dc-toggle-row">
                   <button v-for="s in STATUS_OPTS" :key="s"
                     class="dc-toggle"
-                    :style="form.status===s ? 'border-color:#FFD23F;background:#FFD23F18;color:#FFD23F;font-weight:700' : 'border-color:#1A2535;background:transparent;color:#4A6080'"
+                    :style="form.status===s ? 'border-color:var(--color-warn);background:color-mix(in srgb, var(--color-warn), transparent 90%);color:var(--color-warn);font-weight:700' : 'border-color:var(--border-color);background:transparent;color:var(--text-secondary)'"
                     @click="form.status=s">{{ s }}</button>
                 </div>
               </div>
@@ -73,21 +73,21 @@
             <div v-if="step===2">
               <div class="dc-step-title">Step 2: Full Name of Members</div>
               <div class="dc-members-head">
-                <span style="width:28px;font-size:11px;color:#4A6080;font-family:monospace">#</span>
-                <span style="flex:1;font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.06em">FULL NAME</span>
-                <span style="width:80px;font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.06em">AGE</span>
+                <span style="width:28px;font-size:11px;color:var(--text-secondary);font-family:monospace">#</span>
+                <span style="flex:1;font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.06em">FULL NAME</span>
+                <span style="width:80px;font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.06em">AGE</span>
                 <span style="width:36px"></span>
               </div>
               <div v-for="(m,i) in form.members" :key="i" class="dc-member-row">
                 <div class="dc-member-num">{{ i+1 }}</div>
                 <input v-model="m.fullName" :placeholder="`Member ${i+1}`" class="dc-input"
                   style="flex:1"
-                  @focus="e=>e.target.style.borderColor='#FFD23F'"
-                  @blur="e=>e.target.style.borderColor='#1A2535'" />
+                  @focus="e=>e.target.style.borderColor='var(--color-warn)'"
+                  @blur="e=>e.target.style.borderColor='var(--border-color)'" />
                 <input v-model="m.age" type="number" placeholder="Age" class="dc-input"
                   style="width:80px"
-                  @focus="e=>e.target.style.borderColor='#FFD23F'"
-                  @blur="e=>e.target.style.borderColor='#1A2535'" />
+                  @focus="e=>e.target.style.borderColor='var(--color-warn)'"
+                  @blur="e=>e.target.style.borderColor='var(--border-color)'" />
                 <button class="dc-del-btn" :disabled="form.members.length===1" @click="removeMember(i)"><X :size="14" /></button>
               </div>
               <button class="dc-add-member-btn" @click="addMember">+ Add Another Member</button>
@@ -100,22 +100,22 @@
                 <button v-for="n in NEEDS_OPTS" :key="n"
                   class="dc-need-card"
                   :style="form.needs.includes(n)
-                    ? 'border-color:#FFD23F;background:#FFD23F12'
-                    : 'border-color:#1A2535;background:transparent'"
+                    ? 'border-color:var(--color-warn);background:color-mix(in srgb, var(--color-warn), transparent 92%)'
+                    : 'border-color:var(--border-color);background:transparent'"
                   @click="toggleNeed(n)">
                   <div class="dc-need-check"
                     :style="form.needs.includes(n)
-                      ? 'border-color:#FFD23F;background:#FFD23F;color:#060A0F'
-                      : 'border-color:#4A6080;background:transparent;color:transparent'"><Check v-if="form.needs.includes(n)" :size="14" /></div>
-                  <component :is="{Food:Box,Water:Droplet,Medicine:Stethoscope,Blanket:Bed}[n]" :size="20" :color="form.needs.includes(n)?'#FFD23F':'#4A6080'" />
-                  <span :style="form.needs.includes(n)?'color:#FFD23F;font-weight:700':'color:#E2EAF4'">{{ n }}</span>
+                      ? 'border-color:var(--color-warn);background:var(--color-warn);color:var(--bg-body)'
+                      : 'border-color:var(--text-secondary);background:transparent;color:transparent'"><Check v-if="form.needs.includes(n)" :size="14" /></div>
+                  <component :is="{Food:Box,Water:Droplet,Medicine:Stethoscope,Blanket:Bed}[n]" :size="20" :color="form.needs.includes(n)?'var(--color-warn)':'var(--text-secondary)'" />
+                  <span :style="form.needs.includes(n)?'color:var(--color-warn);font-weight:700':'color:var(--text-primary)'">{{ n }}</span>
                 </button>
               </div>
               <div class="dc-field">
                 <label class="dc-label">OTHER NEEDS (OPTIONAL)</label>
                 <textarea v-model="form.otherNeeds" rows="2" placeholder="Any other specific needs..." class="dc-textarea"
-                  @focus="e=>e.target.style.borderColor='#FFD23F'"
-                  @blur="e=>e.target.style.borderColor='#1A2535'"></textarea>
+                  @focus="e=>e.target.style.borderColor='var(--color-warn)'"
+                  @blur="e=>e.target.style.borderColor='var(--border-color)'"></textarea>
               </div>
             </div>
 
@@ -127,7 +127,7 @@
                 <div class="dc-toggle-row">
                   <button v-for="s in STATUS_OPTS" :key="s"
                     class="dc-toggle"
-                    :style="form.status===s ? 'border-color:#FFD23F;background:#FFD23F18;color:#FFD23F;font-weight:700' : 'border-color:#1A2535;background:transparent;color:#4A6080'"
+                    :style="form.status===s ? 'border-color:var(--color-warn);background:color-mix(in srgb, var(--color-warn), transparent 90%);color:var(--color-warn);font-weight:700' : 'border-color:var(--border-color);background:transparent;color:var(--text-secondary)'"
                     @click="form.status=s">{{ s }}</button>
                 </div>
               </div>
@@ -137,8 +137,8 @@
                   <button v-for="v in VULN_OPTS" :key="v"
                     class="dc-toggle"
                     :style="form.vulnerableGroups.includes(v)
-                      ? 'border-color:#FF3B5C;background:#FF3B5C12;color:#FF3B5C;font-weight:700'
-                      : 'border-color:#1A2535;background:transparent;color:#4A6080'"
+                      ? 'border-color:var(--color-danger);background:color-mix(in srgb, var(--color-danger), transparent 92%);color:var(--color-danger);font-weight:700'
+                      : 'border-color:var(--border-color);background:transparent;color:var(--text-secondary)'"
                     @click="toggleVuln(v)"><Check v-if="form.vulnerableGroups.includes(v)" :size="12" style="margin-right:4px;" />{{ v }}</button>
                 </div>
               </div>
@@ -148,8 +148,8 @@
                 <div class="dc-label" style="margin-bottom:10px">SUMMARY</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
                   <div v-for="([k,v]) in [['Family Name',form.familyName||'—'],['Contact',form.contactNo||'—'],['Members',`${form.members.filter(m=>m.fullName).length} person(s)`],['Status',form.status]]" :key="k">
-                    <div style="font-size:10px;color:#4A6080">{{ k }}</div>
-                    <div style="font-size:13px;font-weight:600;color:#E2EAF4">{{ v }}</div>
+                    <div style="font-size:10px;color:var(--text-secondary)">{{ k }}</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ v }}</div>
                   </div>
                 </div>
                 <div v-if="form.needs.length>0">
@@ -170,38 +170,34 @@
 
               <!-- Photo preview -->
               <div v-if="photo" style="display:flex;flex-direction:column;align-items:center;gap:14px">
-                <div style="position:relative;border-radius:12px;overflow:hidden;border:3px solid #00E5A0;width:100%;max-width:400px">
+                <div style="position:relative;border-radius:12px;overflow:hidden;border:3px solid var(--color-success);width:100%;max-width:400px">
                   <img :src="photo" style="width:100%;display:block" />
-                  <div style="position:absolute;top:10px;left:10px;background:#00E5A0;color:#060A0F;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:4px"><Check :size="14" /> Photo Verified</div>
-                  <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));padding:20px 14px 10px;font-size:11px;color:#fff;font-family:monospace">REPRESENTATIVE INTERVIEW CAPTURED</div>
+                  <div style="position:absolute;top:10px;left:10px;background:var(--color-success);color:var(--bg-body);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:4px"><Check :size="14" /> Photo Verified</div>
+                  <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,var(--bg-overlay));padding:20px 14px 10px;font-size:11px;color:#fff;font-family:monospace">REPRESENTATIVE INTERVIEW CAPTURED</div>
                 </div>
                 <button class="dc-btn-outline sm" @click="photo=null"><RefreshCcw :size="14" /> Retake Photo</button>
               </div>
 
               <!-- Camera UI -->
               <div v-else style="display:flex;flex-direction:column;align-items:center;gap:12px">
-                <div class="dc-viewfinder" :style="streaming?'border-color:#FFD23F':''">
+                <div class="dc-viewfinder" :style="streaming?'border-color:var(--color-warn)':''">
                   <video ref="videoRef" style="width:100%;height:100%;object-fit:cover" :style="streaming?'display:block':'display:none'" muted playsinline autoplay></video>
+                  <canvas ref="canvasRef" style="display:none"></canvas>
 
-                  <div v-if="countdown!==null" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4)">
-                    <div style="font-size:80px;font-weight:900;color:#FFD23F;font-family:monospace;text-shadow:0 0 30px #FFD23F">{{ countdown }}</div>
+                  <div v-if="countdown!==null" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg-overlay)">
+                    <div style="font-size:80px;font-weight:900;color:var(--color-warn);font-family:monospace;text-shadow:0 0 30px var(--color-warn)">{{ countdown }}</div>
                   </div>
 
-                  <div v-if="streaming && countdown===null" style="position:absolute;inset:20px;border:2px dashed #FFD23F55;border-radius:8px;pointer-events:none">
-                    <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:10px;color:#FFD23Faa;font-family:monospace;letter-spacing:.08em">POSITION REPRESENTATIVE IN FRAME</div>
+                  <div v-if="streaming && countdown===null" style="position:absolute;inset:20px;border:2px dashed color-mix(in srgb, var(--color-warn), transparent 66%);border-radius:8px;pointer-events:none">
+                    <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:10px;color:color-mix(in srgb, var(--color-warn), transparent 33%);font-family:monospace;letter-spacing:.08em">POSITION REPRESENTATIVE IN FRAME</div>
                   </div>
 
-                  <div v-if="!streaming" style="text-align:center;color:#4A6080;padding:2rem">
-                    <div style="margin-bottom:10px"><Camera :size="48" color="#4A6080" /></div>
-                    <div style="font-size:13px;font-weight:600;color:#E2EAF4">Camera ready</div>
-                    <div style="font-size:11px;margin-top:4px">Press "Open Camera" to begin</div>
+                  <div v-if="!streaming" style="text-align:center;color:var(--text-secondary);padding:2rem">
+                    <div style="margin-bottom:10px"><Camera :size="48" color="var(--text-secondary)" /></div>
+                    <div v-if="cameraError" style="font-size:12px;color:var(--color-danger);text-align:center;max-width:380px;padding:8px 12px;background:color-mix(in srgb, var(--color-danger), transparent 92%);border:1px solid color-mix(in srgb, var(--color-danger), transparent 80%);border-radius:6px;display:flex;align-items:center;gap:6px"><AlertTriangle :size="14" /> {{ cameraError }}</div>
                   </div>
                 </div>
-
-                <canvas ref="canvasRef" style="display:none"></canvas>
-
-                <div v-if="cameraError" style="font-size:12px;color:#FF3B5C;text-align:center;max-width:380px;padding:8px 12px;background:#FF3B5C12;border:1px solid #FF3B5C33;border-radius:6px;display:flex;align-items:center;gap:6px"><AlertTriangle :size="14" /> {{ cameraError }}</div>
-
+ 
                 <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
                   <template v-if="!streaming">
                     <button class="dc-btn-primary" @click="startCamera"><Camera :size="14" /> Open Camera</button>
@@ -210,14 +206,14 @@
                     <button class="dc-btn-green" @click="captureNow"><Camera :size="14" /> Capture Now</button>
                     <button class="dc-btn-outline sm" @click="timedCapture"><Timer :size="14" /> 3s Timer</button>
                     <button class="dc-btn-ghost sm" @click="switchCam"><RefreshCcw :size="14" /> Flip</button>
-                    <button class="dc-btn-ghost sm" style="color:#FF3B5C" @click="stopCamera"><X :size="14" /> Stop</button>
+                    <button class="dc-btn-ghost sm" style="color:var(--color-danger)" @click="stopCamera"><X :size="14" /> Stop</button>
                   </template>
                 </div>
 
                 <div style="display:flex;align-items:center;gap:10px;width:100%;max-width:400px">
-                  <div style="flex:1;height:1px;background:#1A2535"></div>
-                  <span style="font-size:11px;color:#4A6080">or upload a photo</span>
-                  <div style="flex:1;height:1px;background:#1A2535"></div>
+                  <div style="flex:1;height:1px;background:var(--border-color)"></div>
+                  <span style="font-size:11px;color:var(--text-secondary)">or upload a photo</span>
+                  <div style="flex:1;height:1px;background:var(--border-color)"></div>
                 </div>
                 <label class="dc-upload-label">
                   <FolderOpen :size="14" /> Browse file (JPG, PNG)
@@ -247,10 +243,10 @@
     <Teleport to="body">
       <div v-if="detailFamily" class="dc-overlay" @click.self="detailFamily=null">
         <div class="dc-modal">
-          <div class="dc-modal-head" style="position:sticky;top:0;background:#0D1219;z-index:10">
+          <div class="dc-modal-head" style="position:sticky;top:0;background:var(--bg-surface);z-index:10">
             <div>
-              <div style="font-size:18px;font-weight:900;color:#FFD23F">Family {{ detailFamily.familyName }}</div>
-              <div style="font-size:12px;color:#4A6080;margin-top:2px">{{ detailFamily.id }}</div>
+              <div style="font-size:18px;font-weight:900;color:var(--color-warn)">Family {{ detailFamily.familyName }}</div>
+              <div style="font-size:12px;color:var(--text-secondary);margin-top:2px">{{ detailFamily.id }}</div>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
               <button class="dc-btn-outline sm" @click="requestEdit(detailFamily)"><Pencil :size="14" /> Edit</button>
@@ -264,15 +260,15 @@
             <div v-if="detailFamily.photo" style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px">
               <div style="flex-shrink:0">
                 <div class="dc-label" style="margin-bottom:6px">REPRESENTATIVE PHOTO</div>
-                <img :src="detailFamily.photo" style="width:120px;height:90px;object-fit:cover;border-radius:8px;border:2px solid #00E5A044;display:block" />
-                <div style="font-size:10px;color:#00E5A0;margin-top:4px;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px"><Check :size="12" /> Verified</div>
+                <img :src="detailFamily.photo" style="width:120px;height:90px;object-fit:cover;border-radius:8px;border:2px solid color-mix(in srgb, var(--color-success), transparent 73%);display:block" />
+                <div style="font-size:10px;color:var(--color-success);margin-top:4px;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px"><Check :size="12" /> Verified</div>
               </div>
               <div style="flex:1">
                 <div class="dc-label" style="margin-bottom:8px">BASIC INFORMATION</div>
                 <div class="dc-info-grid">
                   <div class="dc-info-cell" v-for="([k,v]) in [['Family Name',detailFamily.familyName],['Contact No.',detailFamily.contactNo]]" :key="k">
-                    <div style="font-size:10px;color:#4A6080;margin-bottom:2px">{{ k }}</div>
-                    <div style="font-size:14px;font-weight:700;color:#E2EAF4">{{ v||'—' }}</div>
+                    <div style="font-size:10px;color:var(--text-secondary);margin-bottom:2px">{{ k }}</div>
+                    <div style="font-size:14px;font-weight:700;color:var(--text-primary)">{{ v||'—' }}</div>
                   </div>
                 </div>
                 <span class="dc-badge" :style="statusBadgeStyle(detailFamily.status)" style="margin-top:8px;display:inline-block">{{ detailFamily.status }}</span>
@@ -282,8 +278,8 @@
               <div class="dc-label" style="margin-bottom:10px">BASIC INFORMATION</div>
               <div class="dc-info-grid" style="margin-bottom:10px">
                 <div class="dc-info-cell" v-for="([k,v]) in [['Family Name',detailFamily.familyName],['Contact No.',detailFamily.contactNo]]" :key="k">
-                  <div style="font-size:10px;color:#4A6080;margin-bottom:2px">{{ k }}</div>
-                  <div style="font-size:14px;font-weight:700;color:#E2EAF4">{{ v||'—' }}</div>
+                  <div style="font-size:10px;color:var(--text-secondary);margin-bottom:2px">{{ k }}</div>
+                  <div style="font-size:14px;font-weight:700;color:var(--text-primary)">{{ v||'—' }}</div>
                 </div>
               </div>
               <span class="dc-badge" :style="statusBadgeStyle(detailFamily.status)">{{ detailFamily.status }}</span>
@@ -296,7 +292,7 @@
               <div class="dc-label" style="margin-bottom:10px">FAMILY MEMBERS ({{ detailFamily.members.length }})</div>
               <div v-for="(m,i) in detailFamily.members" :key="i" class="dc-member-detail">
                 <div class="dc-member-num">{{ i+1 }}</div>
-                <span style="font-size:13px;font-weight:600;color:#E2EAF4">{{ m.fullName }}</span>
+                <span style="font-size:13px;font-weight:600;color:var(--text-primary)">{{ m.fullName }}</span>
                 <span v-if="m.age" class="dc-badge dc-badge-muted" style="margin-left:auto">Age {{ m.age }}</span>
               </div>
             </div>
@@ -309,7 +305,7 @@
                 <div style="display:flex;gap:6px;flex-wrap:wrap">
                   <span v-for="n in detailFamily.needs" :key="n" class="dc-badge dc-badge-yellow">{{ n }}</span>
                 </div>
-                <div v-if="detailFamily.otherNeeds" style="font-size:12px;color:#4A6080;margin-top:8px;font-style:italic">Other: {{ detailFamily.otherNeeds }}</div>
+                <div v-if="detailFamily.otherNeeds" style="font-size:12px;color:var(--text-secondary);margin-top:8px;font-style:italic">Other: {{ detailFamily.otherNeeds }}</div>
               </div>
             </template>
 
@@ -335,20 +331,20 @@
       <div v-if="showEditAuth" class="dc-overlay" style="z-index:500">
         <div class="dc-auth-modal">
           <div style="text-align:center;margin-bottom:20px">
-            <div style="margin-bottom:8px"><Lock :size="36" color="#FFD23F" /></div>
-            <div style="font-size:17px;font-weight:900;color:#FFD23F;margin-bottom:6px">Authentication Required</div>
-            <div style="font-size:13px;color:#4A6080;line-height:1.7">
-              You are about to edit <strong style="color:#E2EAF4">Family {{ pendingEditFamily?.familyName }}</strong>.<br>
+            <div style="margin-bottom:8px"><Lock :size="36" color="var(--color-warn)" /></div>
+            <div style="font-size:17px;font-weight:900;color:var(--color-warn);margin-bottom:6px">Authentication Required</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+              You are about to edit <strong style="color:var(--text-primary)">Family {{ pendingEditFamily?.familyName }}</strong>.<br>
               Enter your barangay password to continue.
             </div>
           </div>
           <div class="dc-label" style="margin-bottom:6px">BARANGAY PASSWORD</div>
           <input type="password" v-model="editPwd" placeholder="Enter password to confirm"
             autofocus @keydown.enter="confirmEdit"
-            class="dc-input" :style="editErr?'border-color:#FF3B5C':''"
-            @focus="e=>e.target.style.borderColor='#FFD23F'"
-            @blur="e=>e.target.style.borderColor=editErr?'#FF3B5C':'#1A2535'" />
-          <div v-if="editErr" style="font-size:12px;color:#FF3B5C;margin-top:6px">{{ editErr }}</div>
+            class="dc-input" :style="editErr?'border-color:var(--color-danger)':''"
+            @focus="e=>e.target.style.borderColor='var(--color-warn)'"
+            @blur="e=>e.target.style.borderColor=editErr?'var(--color-danger)':'var(--border-color)'" />
+          <div v-if="editErr" style="font-size:12px;color:var(--color-danger);margin-top:6px">{{ editErr }}</div>
           <div class="dc-modal-nav" style="margin-top:16px">
             <button class="dc-btn-ghost" @click="showEditAuth=false;editPwd='';editErr=''">Cancel</button>
             <button class="dc-btn-primary" :disabled="!editPwd" @click="confirmEdit"><Pencil :size="14" /> Confirm Edit</button>
@@ -362,22 +358,22 @@
     ═══════════════════════════════════════════════════════ -->
     <Teleport to="body">
       <div v-if="showDeleteConfirm" class="dc-overlay" style="z-index:500">
-        <div class="dc-auth-modal" style="border-color:#FF3B5C44">
+        <div class="dc-auth-modal" style="border-color:color-mix(in srgb, var(--color-danger), transparent 73%)">
           <div style="text-align:center;margin-bottom:20px">
-            <div style="margin-bottom:8px"><Trash2 :size="36" color="#FF3B5C" /></div>
-            <div style="font-size:17px;font-weight:900;color:#FF3B5C;margin-bottom:6px">Authentication Required</div>
-            <div style="font-size:13px;color:#4A6080;line-height:1.7">
-              You are about to permanently remove <strong style="color:#E2EAF4">Family {{ detailFamily?.familyName }}</strong>.<br>
+            <div style="margin-bottom:8px"><Trash2 :size="36" color="var(--color-danger)" /></div>
+            <div style="font-size:17px;font-weight:900;color:var(--color-danger);margin-bottom:6px">Authentication Required</div>
+            <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+              You are about to permanently remove <strong style="color:var(--text-primary)">Family {{ detailFamily?.familyName }}</strong>.<br>
               Enter your barangay password to confirm.
             </div>
           </div>
           <div class="dc-label" style="margin-bottom:6px">BARANGAY PASSWORD</div>
           <input type="password" v-model="deletePwd" placeholder="Enter password to confirm"
             autofocus @keydown.enter="confirmDelete"
-            class="dc-input" :style="deleteErr?'border-color:#FF3B5C':''"
-            @focus="e=>e.target.style.borderColor='#FFD23F'"
-            @blur="e=>e.target.style.borderColor=deleteErr?'#FF3B5C':'#1A2535'" />
-          <div v-if="deleteErr" style="font-size:12px;color:#FF3B5C;margin-top:6px">{{ deleteErr }}</div>
+            class="dc-input" :style="deleteErr?'border-color:var(--color-danger)':''"
+            @focus="e=>e.target.style.borderColor='var(--color-warn)'"
+            @blur="e=>e.target.style.borderColor=deleteErr?'var(--color-danger)':'var(--border-color)'" />
+          <div v-if="deleteErr" style="font-size:12px;color:var(--color-danger);margin-top:6px">{{ deleteErr }}</div>
           <div class="dc-modal-nav" style="margin-top:16px">
             <button class="dc-btn-ghost" @click="showDeleteConfirm=false;deletePwd='';deleteErr=''">Cancel</button>
             <button class="dc-btn-danger" :disabled="!deletePwd" @click="confirmDelete"><Trash2 :size="14" /> Confirm Remove</button>
@@ -389,62 +385,103 @@
     <!-- ════════════════════════════════════════════════════
          PAGE CONTENT
     ═══════════════════════════════════════════════════════ -->
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
-      <div>
-        <h1 style="font-size:22px;font-weight:900;color:#E2EAF4">Resident List</h1>
-        <p style="color:#4A6080;font-size:13px;margin-top:4px">Manage registered families and track their information</p>
+    <div class="page-header">
+      <div class="header-text">
+        <div class="module-tag">BARANGAY MODULE 01</div>
+        <h1 class="page-title">Resident Registry</h1>
+        <p class="page-sub">Comprehensive database of families, vulnerability status, and relief tracking</p>
       </div>
-      <button class="dc-btn-primary" @click="openAdd"><Plus :size="16" /> Add Family</button>
+      <button class="dc-btn-primary" @click="openAdd">
+        <Plus :size="16" /> Add New Family
+      </button>
     </div>
 
     <!-- Stat boxes -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
-      <div class="dc-stat" v-for="s in statBoxes" :key="s.label">
-        <div class="dc-stat-glow" :style="`background:${s.color}08`"></div>
-        <div style="margin-bottom:8px"><component :is="s.icon" :size="20" :color="s.color" /></div>
-        <div style="font-size:28px;font-weight:900;line-height:1;font-family:monospace" :style="`color:${s.color}`">{{ s.value }}</div>
-        <div style="font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:4px">{{ s.label }}</div>
+    <div class="registry-stats">
+      <div v-for="s in statBoxes" :key="s.label" class="mini-stat">
+        <div class="mini-icon" :style="{ background: s.color + '18', color: s.color }">
+          <component :is="s.icon" :size="18" />
+        </div>
+        <div class="mini-content">
+          <div class="mini-val" :style="{ color: s.color }">{{ s.value }}</div>
+          <div class="mini-label">{{ s.label }}</div>
+        </div>
       </div>
     </div>
 
-    <!-- Search -->
-    <div style="margin-bottom:14px">
-      <div style="position:relative">
-        <Search :size="14" style="position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#4A6080" />
-        <input v-model="search" placeholder="Search by family name..."
-          style="width:100%;background:#0D1219;border:1px solid #1A2535;border-radius:8px;padding:10px 16px 10px 40px;color:#E2EAF4;font-size:13px;outline:none;transition:border-color .2s;box-sizing:border-box"
-          @focus="e=>e.target.style.borderColor='#FFD23F'"
-          @blur="e=>e.target.style.borderColor='#1A2535'" />
+    <!-- Search & Filter Bar -->
+    <div class="search-bar-container">
+      <div class="search-wrapper">
+        <Search :size="16" class="search-icon" />
+        <input v-model="search" placeholder="Search by family name or representative..." class="search-input" />
       </div>
     </div>
 
     <!-- Empty state -->
-    <div v-if="filtered.length===0" style="text-align:center;padding:5rem;color:#4A6080;display:flex;flex-direction:column;align-items:center">
-      <div style="margin-bottom:12px"><Users :size="40" color="#4A6080" /></div>
-      <div style="font-size:15px;font-weight:700;margin-bottom:6px;color:#E2EAF4">
-        {{ localResidents.length===0 ? 'No families registered yet' : 'No results found' }}
+    <div v-if="filtered.length===0" class="empty-state-card">
+      <div class="empty-glow"></div>
+      <Users :size="48" class="empty-icon-large" />
+      <div class="empty-title">
+        {{ localResidents.length===0 ? 'Registry is Empty' : 'No Results Found' }}
       </div>
-      <div style="font-size:13px;margin-bottom:20px">
-        {{ localResidents.length===0 ? "Click '+ Add Family' to register the first family." : 'Try a different search term.' }}
-      </div>
-      <button v-if="localResidents.length===0" class="dc-btn-primary" @click="openAdd"><Plus :size="16" /> Add First Family</button>
+      <p class="empty-desc">
+        {{ localResidents.length===0 ? "Start by registering families in your barangay to track their safety and needs." : 'We couldn\'t find any family matching your search term.' }}
+      </p>
+      <button v-if="localResidents.length===0" class="dc-btn-primary" @click="openAdd">
+        <Plus :size="16" /> Register First Family
+      </button>
     </div>
 
-    <!-- Family list -->
-    <div v-else style="display:flex;flex-direction:column;gap:8px">
-      <div v-for="f in filtered" :key="f.id" class="dc-family-card" @click="detailFamily=f">
-        <div class="dc-family-avatar"><Users :size="20" color="#FFD23F" /></div>
-        <div style="flex:1">
-          <div style="font-size:16px;font-weight:800;color:#FFD23F;margin-bottom:3px">{{ f.familyName }}</div>
-          <div style="font-size:12px;color:#4A6080">
-            {{ f.members.length }} member{{ f.members.length!==1?'s':'' }}{{ f.contactNo?' · '+f.contactNo:'' }}
+    <!-- Family list (Grid) -->
+    <div v-else class="resident-grid">
+      <div v-for="f in filtered" :key="f.id" class="family-card-premium" @click="detailFamily=f">
+        <div class="f-card-top">
+          <div class="f-avatar-wrap">
+            <div class="f-avatar">
+              <Users v-if="!f.photo" :size="24" />
+              <img v-else :src="f.photo" class="f-photo-thumb" />
+            </div>
+            <div v-if="f.vulnerableGroups && f.vulnerableGroups.length > 0" class="v-pulse" title="Vulnerable Family"></div>
+          </div>
+          <div class="f-main">
+            <div class="f-name-row">
+              <span class="f-surname">{{ f.familyName }}</span>
+              <span class="f-id">#{{ f.id.slice(-4) }}</span>
+            </div>
+            <div class="f-contact">{{ f.contactNo || 'No contact saved' }}</div>
+          </div>
+          <div class="f-status-tag" :style="statusBadgeStyle(f.status)">
+            {{ f.status }}
           </div>
         </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-          <span v-if="f.vulnerableGroups&&f.vulnerableGroups.length>0" class="dc-badge dc-badge-red" style="display:flex;align-items:center;gap:4px"><AlertTriangle :size="10" /> Vulnerable</span>
-          <span v-if="f.needs&&f.needs.length>0" class="dc-badge dc-badge-yellow">{{ f.needs.length }} need{{ f.needs.length!==1?'s':'' }}</span>
-          <span class="dc-badge" :style="statusBadgeStyle(f.status)">{{ f.status }}</span>
-          <ChevronRight :size="18" color="#4A6080" />
+
+        <div class="f-card-mid">
+          <div class="f-stat-item">
+            <span class="f-stat-val">{{ f.members.length }}</span>
+            <span class="f-stat-lbl">Members</span>
+          </div>
+          <div class="f-stat-divider"></div>
+          <div class="f-stat-item">
+            <span class="f-stat-val">{{ (f.needs || []).length }}</span>
+            <span class="f-stat-lbl">Needs</span>
+          </div>
+        </div>
+
+        <div class="f-card-bottom">
+          <div class="f-tags-list">
+            <template v-if="f.vulnerableGroups && f.vulnerableGroups.length > 0">
+              <span v-for="v in f.vulnerableGroups.slice(0, 2)" :key="v" class="f-mini-tag red">
+                {{ v }}
+              </span>
+              <span v-if="f.vulnerableGroups.length > 2" class="f-mini-tag muted">+{{ f.vulnerableGroups.length - 2 }}</span>
+            </template>
+            <template v-else>
+              <span class="f-mini-tag green">Standard Risk</span>
+            </template>
+          </div>
+          <div class="f-arrow">
+            <ChevronRight :size="16" />
+          </div>
         </div>
       </div>
     </div>
@@ -579,7 +616,6 @@ const canNext = computed(() => {
 const canSave = computed(() => (!!editTarget.value || !!photo.value) && !isSaving.value)
 
 // ── Save family ───────────────────────────────────────────────────────────────
-// ── Save family ───────────────────────────────────────────────────────────────
 const saveFamily = async () => {
   if (!form.familyName.trim()) return
   isSaving.value = true
@@ -654,11 +690,9 @@ const confirmEdit = () => {
 const showDeleteConfirm = ref(false)
 const deletePwd         = ref('')
 const deleteErr         = ref('')
-const isDeleting        = ref(false)
 
 const confirmDelete = async () => {
   if (deletePwd.value === ADMIN_PWD) {
-    isDeleting.value = true
     try {
       await deleteDoc(doc(db, 'residents', detailFamily.value?.id))
       detailFamily.value      = null
@@ -667,8 +701,6 @@ const confirmDelete = async () => {
     } catch (e) {
       console.error(e)
       deleteErr.value = 'Failed to delete from database.'
-    } finally {
-      isDeleting.value = false
     }
   } else {
     deleteErr.value = 'Incorrect password. Please try again.'
@@ -700,9 +732,23 @@ const startCamera = async (mode = facingMode.value) => {
 }
 const captureNow = () => {
   const canvas = canvasRef.value, video = videoRef.value
-  if (!canvas||!video) return
-  canvas.width  = video.videoWidth  || 640
-  canvas.height = video.videoHeight || 480
+  if (!canvas || !video || video.videoWidth === 0) {
+    console.error("Camera not ready");
+    cameraError.value = "Camera not ready. Please wait a moment or try again.";
+    return
+  }
+
+  // Visual Flash effect
+  const flash = document.createElement('div')
+  flash.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:100000;pointer-events:none;transition:opacity 0.4s'
+  document.body.appendChild(flash)
+  setTimeout(() => { 
+    flash.style.opacity = '0'; 
+    setTimeout(() => flash.remove(), 400) 
+  }, 50)
+
+  canvas.width  = video.videoWidth
+  canvas.height = video.videoHeight
   canvas.getContext('2d').drawImage(video, 0, 0)
   photo.value   = canvas.toDataURL('image/jpeg', 0.9)
   stopCamera()
@@ -735,22 +781,22 @@ const filtered = computed(() =>
 )
 
 const statBoxes = computed(() => [
-  { icon: Users,         label:'Total Families',  value: localResidents.value.length,                                                              color:'#FFD23F' },
-  { icon: Home,          label:'At Home',         value: localResidents.value.filter(r=>r.status==='At Home').length,                             color:'#00E5A0' },
-  { icon: Footprints,    label:'Evacuated',       value: localResidents.value.filter(r=>r.status==='Evacuated').length,                           color:'#FFD23F' },
-  { icon: AlertTriangle, label:'Vulnerable',      value: localResidents.value.filter(r=>r.vulnerableGroups&&r.vulnerableGroups.length>0).length,  color:'#FF3B5C' },
+  { icon: Users,         label:'Total Families',  value: localResidents.value.length,                                                              color:'var(--color-warn)' },
+  { icon: Home,          label:'At Home',         value: localResidents.value.filter(r=>r.status==='At Home').length,                             color:'var(--color-success)' },
+  { icon: Footprints,    label:'Evacuated',       value: localResidents.value.filter(r=>r.status==='Evacuated').length,                           color:'var(--color-warn)' },
+  { icon: AlertTriangle, label:'Vulnerable',      value: localResidents.value.filter(r=>r.vulnerableGroups&&r.vulnerableGroups.length>0).length,  color:'var(--color-danger)' },
 ])
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const statusBadgeStyle = (s) => {
-  const c = ({ 'At Home':'#00E5A0', Evacuated:'#FFD23F', Missing:'#FF3B5C', Relocated:'#00D4FF' })[s] || '#4A6080'
+  const c = ({ 'At Home':'var(--color-success)', Evacuated:'var(--color-warn)', Missing:'var(--color-danger)', Relocated:'var(--color-accent)' })[s] || 'var(--text-secondary)'
   return { background:`${c}18`, border:`1px solid ${c}44`, color:c }
 }
 
 const stepDotStyle = (n) => {
-  if (step.value > n)  return 'background:#FFD23F;border-color:#FFD23F;color:#060A0F'
-  if (step.value === n) return 'background:#FFD23F22;border-color:#FFD23F;color:#FFD23F'
-  return 'background:#1A2535;border-color:#1A2535;color:#4A6080'
+  if (step.value > n)  return 'background:var(--color-warn);border-color:var(--color-warn);color:var(--bg-body)'
+  if (step.value === n) return 'background:var(--color-warn)22;border-color:var(--color-warn);color:var(--color-warn)'
+  return 'background:var(--border-color);border-color:var(--border-color);color:var(--text-secondary)'
 }
 </script>
 
@@ -758,99 +804,176 @@ const stepDotStyle = (n) => {
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;600;700;800;900&display=swap');
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-@keyframes float  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } }
 .fade-up { animation:fadeUp .4s ease forwards }
 
-/* ── Overlay & Modal ── */
-.dc-overlay  { position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem;font-family:'Outfit',sans-serif }
-.dc-modal    { background:#0D1219;border:1px solid #FFD23F44;border-radius:12px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;overflow-x:hidden }
-.dc-auth-modal { background:#0D1219;border:2px solid #FFD23F44;border-radius:12px;width:100%;max-width:400px;padding:1.75rem;font-family:'Outfit',sans-serif }
-.dc-modal-head { padding:1.25rem 1.5rem;border-bottom:1px solid #1A2535;display:flex;justify-content:space-between;align-items:center }
+/* ── Page Layout ── */
+.page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+.module-tag { font-size: 10px; color: var(--color-warn); font-family: 'DM Mono', monospace; letter-spacing: 0.12em; margin-bottom: 4px; }
+.page-title { font-size: 24px; font-weight: 900; color: var(--text-primary); }
+.page-sub { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+
+/* ── Registry Stats ── */
+.registry-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+.mini-stat { 
+  background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; 
+  display: flex; align-items: center; gap: 14px; transition: transform 0.2s;
+}
+.mini-stat:hover { transform: translateY(-2px); border-color: var(--border-color-hover); }
+.mini-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mini-content { flex: 1; }
+.mini-val { font-size: 20px; font-weight: 800; line-height: 1.1; font-family: 'DM Mono', monospace; }
+.mini-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; font-weight: 600; }
+
+/* ── Search Bar ── */
+.search-bar-container { margin-bottom: 20px; }
+.search-wrapper { position: relative; width: 100%; max-width: 600px; }
+.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); pointer-events: none; }
+.search-input { 
+  width: 100%; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 10px; 
+  padding: 12px 16px 12px 44px; color: var(--text-primary); font-size: 14px; outline: none; transition: all 0.2s;
+  font-family: 'Outfit', sans-serif;
+}
+.search-input:focus { border-color: var(--color-warn); box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-warn), transparent 90%); }
+
+/* ── Resident Grid ── */
+.resident-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.family-card-premium { 
+  background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 20px; 
+  cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.family-card-premium:hover { 
+  transform: translateY(-4px); border-color: var(--color-warn); 
+  box-shadow: 0 10px 20px -10px color-mix(in srgb, var(--color-warn), transparent 80%);
+}
+
+.f-card-top { display: flex; gap: 14px; align-items: flex-start; }
+.f-avatar-wrap { position: relative; }
+.f-avatar { 
+  width: 48px; height: 48px; border-radius: 12px; background: var(--bg-body); 
+  display: flex; align-items: center; justify-content: center; color: var(--text-secondary); overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.f-photo-thumb { width: 100%; height: 100%; object-fit: cover; }
+.v-pulse { 
+  position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; background: var(--color-danger); 
+  border-radius: 50%; border: 2px solid var(--bg-surface); animation: pulse 2s infinite;
+}
+
+.f-main { flex: 1; min-width: 0; }
+.f-name-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px; }
+.f-surname { font-size: 16px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.f-id { font-size: 10px; color: var(--text-secondary); font-family: 'DM Mono', monospace; opacity: 0.6; }
+.f-contact { font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; }
+
+.f-status-tag { 
+  font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; 
+  padding: 3px 8px; border-radius: 6px; font-family: 'DM Mono', monospace;
+}
+
+.f-card-mid { 
+  display: flex; align-items: center; background: var(--bg-body); border-radius: 10px; padding: 10px;
+  border: 1px solid var(--border-color);
+}
+.f-stat-item { flex: 1; text-align: center; display: flex; flex-direction: column; }
+.f-stat-val { font-size: 14px; font-weight: 800; color: var(--text-primary); font-family: 'DM Mono', monospace; }
+.f-stat-lbl { font-size: 9px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; }
+.f-stat-divider { width: 1px; height: 20px; background: var(--border-color); }
+
+.f-card-bottom { display: flex; justify-content: space-between; align-items: center; }
+.f-tags-list { display: flex; gap: 4px; flex-wrap: wrap; }
+.f-mini-tag { font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.f-mini-tag.red { background: color-mix(in srgb, var(--color-danger), transparent 90%); color: var(--color-danger); }
+.f-mini-tag.green { background: color-mix(in srgb, var(--color-success), transparent 90%); color: var(--color-success); }
+.f-mini-tag.muted { background: var(--bg-body); color: var(--text-secondary); border: 1px solid var(--border-color); }
+.f-arrow { color: var(--text-secondary); opacity: 0.4; }
+
+/* ── Empty State Card ── */
+.empty-state-card { 
+  background: var(--bg-surface); border: 1px dashed var(--border-color); border-radius: 20px; 
+  padding: 60px 20px; text-align: center; position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center;
+}
+.empty-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; background: var(--color-warn); filter: blur(100px); opacity: 0.05; }
+.empty-icon-large { color: var(--border-color); margin-bottom: 20px; stroke-width: 1; }
+.empty-title { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 8px; }
+.empty-desc { font-size: 13px; color: var(--text-secondary); max-width: 320px; margin-bottom: 24px; line-height: 1.6; }
+
+/* ── Modals & Verification ── */
+.dc-overlay  { position:fixed;inset:0;background:var(--bg-overlay);z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem;font-family:'Outfit',sans-serif }
+.dc-modal    { background:var(--bg-surface); border:1px solid color-mix(in srgb, var(--color-warn), transparent 73%); border-radius:12px; width:100%; max-width:600px; max-height:92vh; overflow-y:auto; overflow-x:hidden }
+.dc-auth-modal { background:var(--bg-surface); border:2px solid color-mix(in srgb, var(--color-warn), transparent 73%); border-radius:12px; width:100%; max-width:400px; padding:1.75rem; font-family:'Outfit',sans-serif }
+.dc-modal-head { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center }
 .dc-modal-body { padding:1.5rem }
-.dc-modal-title { font-size:16px;font-weight:800;color:#FFD23F }
-.dc-modal-sub   { font-size:12px;color:#4A6080;margin-top:2px }
+.dc-modal-title { font-size:16px; font-weight:800; color:var(--color-warn) }
+.dc-modal-sub   { font-size:12px;color:var(--text-secondary);margin-top:2px }
 .dc-modal-nav   { display:flex;justify-content:space-between;margin-top:24px }
-.dc-icon-close  { background:#1A2535;border:none;color:#4A6080;width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif }
+.dc-icon-close  { background:var(--border-color);border:none;color:var(--text-secondary);width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif }
 
 /* ── Step bar ── */
 .dc-stepbar    { display:flex;align-items:center;margin-bottom:24px }
 .dc-step-item  { display:flex;align-items:center;gap:7px }
-.dc-step-dot   { width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s;border:2px solid #1A2535 }
+.dc-step-dot   { width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s;border:2px solid var(--border-color) }
 .dc-step-lbl   { font-size:11px;white-space:nowrap;transition:color .2s }
 .dc-step-line  { flex:1;height:1px;margin:0 8px;transition:background .3s }
-.dc-step-title { font-size:14px;font-weight:700;color:#FFD23F;margin-bottom:16px }
+.dc-step-title { font-size:14px; font-weight:700; color:var(--color-warn); margin-bottom:16px }
 
 /* ── Form fields ── */
 .dc-field    { margin-bottom:14px }
-.dc-label    { display:block;font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px }
-.dc-input    { width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:6px;padding:10px 12px;color:#E2EAF4;font-size:13px;outline:none;box-sizing:border-box;font-family:'Outfit',sans-serif;transition:border-color .2s }
-.dc-textarea { width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:6px;padding:10px 12px;color:#E2EAF4;font-size:13px;outline:none;resize:vertical;box-sizing:border-box;font-family:'Outfit',sans-serif;transition:border-color .2s }
+.dc-label    { display:block;font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px }
+.dc-input    { width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:6px;padding:10px 12px;color:var(--text-primary);font-size:13px;outline:none;box-sizing:border-box;font-family:'Outfit',sans-serif;transition:border-color .2s }
+.dc-textarea { width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:6px;padding:10px 12px;color:var(--text-primary);font-size:13px;outline:none;resize:vertical;box-sizing:border-box;font-family:'Outfit',sans-serif;transition:border-color .2s }
 .dc-toggle-row { display:flex;gap:8px;flex-wrap:wrap }
-.dc-toggle   { padding:7px 16px;border-radius:6px;border:1px solid #1A2535;background:transparent;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s }
+.dc-toggle   { padding:7px 16px;border-radius:6px;border:1px solid var(--border-color);background:transparent;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s }
 
 /* ── Members ── */
 .dc-members-head { display:flex;gap:8px;margin-bottom:8px;align-items:center }
 .dc-member-row   { display:flex;gap:8px;margin-bottom:8px;align-items:center }
-.dc-member-num   { width:28px;height:28px;border-radius:50%;background:#FFD23F18;border:1px solid #FFD23F33;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#FFD23F;flex-shrink:0 }
-.dc-del-btn      { width:36px;height:36px;border-radius:6px;background:#FF3B5C18;border:1px solid #FF3B5C33;color:#FF3B5C;font-size:13px;cursor:pointer;flex-shrink:0 }
+.dc-member-num   { width:28px; height:28px; border-radius:50%; background:color-mix(in srgb, var(--color-warn), transparent 90%); border:1px solid color-mix(in srgb, var(--color-warn), transparent 80%); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--color-warn); flex-shrink:0 }
+.dc-del-btn      { width:36px; height:36px; border-radius:6px; background:color-mix(in srgb, var(--color-danger), transparent 90%); border:1px solid color-mix(in srgb, var(--color-danger), transparent 80%); color:var(--color-danger); font-size:13px; cursor:pointer; flex-shrink:0 }
 .dc-del-btn:disabled { opacity:.3;cursor:not-allowed }
-.dc-add-member-btn { width:100%;padding:9px;border:1px dashed #1A2535;border-radius:6px;background:none;color:#4A6080;font-size:12px;cursor:pointer;margin-top:4px;font-family:'Outfit',sans-serif }
+.dc-add-member-btn { width:100%;padding:9px;border:1px dashed var(--border-color);border-radius:6px;background:none;color:var(--text-secondary);font-size:12px;cursor:pointer;margin-top:4px;font-family:'Outfit',sans-serif }
 
 /* ── Needs ── */
 .dc-needs-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px }
-.dc-need-card  { padding:14px 16px;border:2px solid #1A2535;border-radius:8px;background:transparent;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif }
-.dc-need-check { width:20px;height:20px;border-radius:4px;border:2px solid #4A6080;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:900;transition:all .2s }
+.dc-need-card  { padding:14px 16px;border:2px solid var(--border-color);border-radius:8px;background:transparent;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif }
+.dc-need-check { width:20px;height:20px;border-radius:4px;border:2px solid var(--text-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:900;transition:all .2s }
 
 /* ── Summary ── */
-.dc-summary-box { padding:1rem;background:#060A0F;border:1px solid #1A2535;border-radius:8px;margin-top:16px }
+.dc-summary-box { padding:1rem;background:var(--bg-body);border:1px solid var(--border-color);border-radius:8px;margin-top:16px }
 
 /* ── Camera ── */
-.dc-camera-notice { font-size:12px;color:#4A6080;line-height:1.7;padding:10px 14px;background:#FFD23F08;border:1px solid #FFD23F22;border-radius:8px;margin-bottom:16px }
-.dc-viewfinder    { width:100%;max-width:400px;border-radius:12px;overflow:hidden;background:#000;border:2px solid #1A2535;aspect-ratio:4/3;position:relative;display:flex;align-items:center;justify-content:center;transition:border-color .3s }
-.dc-upload-label  { display:flex;align-items:center;gap:8px;padding:9px 20px;border:1px dashed #1A2535;border-radius:8px;cursor:pointer;font-size:12px;color:#4A6080;width:100%;max-width:400px;justify-content:center;transition:border-color .2s;font-family:'Outfit',sans-serif }
-.dc-upload-label:hover { border-color:#FFD23F }
-
-/* ── Stat boxes ── */
-.dc-stat      { background:#0D1219;border:1px solid #1A2535;border-radius:8px;padding:1.2rem;position:relative;overflow:hidden }
-.dc-stat-glow { position:absolute;top:0;right:0;width:60px;height:60px;border-radius:0 8px 0 60px }
-
-/* ── Family card ── */
-.dc-family-card   { background:#0D1219;border:1px solid #1A2535;border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all .2s }
-.dc-family-card:hover { border-color:#FFD23F55;transform:translateY(-2px) }
-.dc-family-avatar { width:42px;height:42px;border-radius:10px;background:#FFD23F15;border:1px solid #FFD23F33;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0 }
-
-/* ── Detail modal pieces ── */
-.dc-info-grid   { display:grid;grid-template-columns:1fr 1fr;gap:10px }
-.dc-info-cell   { background:#060A0F;border:1px solid #1A2535;border-radius:6px;padding:10px 14px }
-.dc-member-detail { display:flex;align-items:center;gap:10px;padding:8px 12px;background:#060A0F;border:1px solid #1A2535;border-radius:6px;margin-bottom:6px }
-.dc-divider     { height:1px;background:#1A2535;border:none;margin:1rem 0 }
+.dc-camera-notice { font-size:12px;color:var(--text-secondary);line-height:1.7;padding:10px 14px;background:color-mix(in srgb, var(--color-warn), transparent 96%);border:1px solid color-mix(in srgb, var(--color-warn), transparent 87%);border-radius:8px;margin-bottom:16px }
+.dc-viewfinder    { width:100%;max-width:400px;border-radius:12px;overflow:hidden;background:var(--bg-body);border:2px solid var(--border-color);aspect-ratio:4/3;position:relative;display:flex;align-items:center;justify-content:center;transition:border-color .3s }
+.dc-upload-label  { display:flex;align-items:center;gap:8px;padding:9px 20px;border:1px dashed var(--border-color);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text-secondary);width:100%;max-width:400px;justify-content:center;transition:border-color .2s;font-family:'Outfit',sans-serif }
 
 /* ── Badges ── */
 .dc-badge        { font-family:'DM Mono',monospace;font-size:10px;padding:2px 8px;border-radius:2px;display:inline-block;letter-spacing:.06em }
-.dc-badge-yellow { background:#FFD23F18;border:1px solid #FFD23F44;color:#FFD23F }
-.dc-badge-red    { background:#FF3B5C18;border:1px solid #FF3B5C44;color:#FF3B5C }
-.dc-badge-muted  { background:#4A608018;border:1px solid #4A608044;color:#4A6080 }
+.dc-badge-yellow { background:var(--color-warn-dim);border:1px solid var(--color-warn-dim);color:var(--color-warn) }
+.dc-badge-red    { background:var(--color-danger-dim);border:1px solid var(--color-danger-dim);color:var(--color-danger) }
+.dc-badge-muted  { background:var(--text-secondary)18;border:1px solid var(--text-secondary)44;color:var(--text-secondary) }
 
 /* ── Buttons ── */
-.dc-btn-primary { background:#FFD23F;color:#060A0F;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s;font-family:'Outfit',sans-serif }
+.dc-btn-primary { background:var(--color-warn);color:var(--bg-body);border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s;font-family:'Outfit',sans-serif }
 .dc-btn-primary:hover:not(:disabled) { opacity:.8 }
 .dc-btn-primary:disabled { opacity:.4;cursor:not-allowed }
 .dc-btn-primary.sm { font-size:11px;padding:6px 14px }
-.dc-btn-green   { background:#00E5A0;color:#060A0F;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s;font-family:'Outfit',sans-serif }
+.dc-btn-green   { background:var(--color-success);color:var(--bg-body);border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s;font-family:'Outfit',sans-serif }
 .dc-btn-green:hover:not(:disabled) { opacity:.8 }
 .dc-btn-green:disabled { opacity:.4;cursor:not-allowed }
-.dc-btn-ghost   { background:transparent;border:1px solid #1A2535;color:#E2EAF4;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif }
+.dc-btn-ghost   { background:transparent;border:1px solid var(--border-color);color:var(--text-primary);border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif }
 .dc-btn-ghost:hover { opacity:.8 }
 .dc-btn-ghost.sm { font-size:12px;padding:7px 14px }
-.dc-btn-outline { background:transparent;border:1px solid #FFD23F;color:#FFD23F;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif }
+.dc-btn-outline { background:transparent;border:1px solid var(--color-warn);color:var(--color-warn);border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif }
 .dc-btn-outline:hover { opacity:.8 }
 .dc-btn-outline.sm { font-size:12px;padding:6px 14px }
-.dc-btn-danger  { background:#FF3B5C;color:#fff;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif }
+.dc-btn-danger  { background:var(--color-danger);color:var(--bg-body);border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif }
 .dc-btn-danger:hover:not(:disabled) { opacity:.8 }
 .dc-btn-danger:disabled { opacity:.4;cursor:not-allowed }
 .dc-btn-danger.sm { font-size:12px;padding:6px 14px }
 
 /* ── Spinner ── */
-.dc-spinner { width:14px;height:14px;border:2px solid #06060F33;border-top:2px solid #060A0F;border-radius:50%;animation:dc-spin 0.8s linear infinite;display:inline-block }
+.dc-spinner { width:14px;height:14px;border:2px solid var(--border-color);border-top:2px solid var(--bg-body);border-radius:50%;animation:dc-spin 0.8s linear infinite;display:inline-block }
 @keyframes dc-spin { to { transform:rotate(360deg) } }
 </style>

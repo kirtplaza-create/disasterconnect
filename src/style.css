@@ -1,2 +1,79 @@
+:root {
+  /* DARK THEME (Default) */
+  --bg-body: #060A0F;
+  --bg-body-rgb: 6, 10, 15;
+  --bg-surface: #0D1219;
+  --bg-surface-rgb: 13, 18, 25;
+  --bg-card: #0D1219;
+  --bg-input: #060A0F;
+  --border-color: #1A2535;
+  --border-color-rgb: 26, 37, 53;
+  --text-primary: #E2EAF4;
+  --text-primary-rgb: 226, 234, 244;
+  --text-secondary: #94A3B8;
+  --text-secondary-rgb: 148, 163, 184;
+  --text-dim: #64748B;
+  --text-dim-rgb: 100, 116, 139;
+  --accent-glow: rgba(0, 212, 255, 0.05);
+  --scrollbar-track: #060A0F;
+  --scrollbar-thumb: #1A2535;
+
+  /* FUNCTIONAL COLORS (DARK) */
+  --color-accent: #00D4FF;
+  --color-accent-rgb: 0, 212, 255;
+  --color-success: #00E5A0;
+  --color-success-rgb: 0, 229, 160;
+  --color-danger: #FF3B5C;
+  --color-danger-rgb: 255, 59, 92;
+  --color-warn: #FFD23F;
+  --color-warn-rgb: 255, 210, 63;
+  --color-high: #FF6B35;
+  --color-high-rgb: 255, 107, 53;
+
+  /* Dim variations using RGB */
+  --color-accent-dim: rgba(var(--color-accent-rgb), 0.1);
+  --color-success-dim: rgba(var(--color-success-rgb), 0.1);
+  --color-danger-dim: rgba(var(--color-danger-rgb), 0.1);
+  --color-warn-dim: rgba(var(--color-warn-rgb), 0.1);
+  --color-high-dim: rgba(var(--color-high-rgb), 0.1);
+  
+  --bg-overlay: rgba(0, 0, 0, 0.75);
+}
+
+body.light-mode {
+  /* LIGHT THEME */
+  --bg-body: #F8FAFC;
+  --bg-body-rgb: 248, 250, 252;
+  --bg-surface: #FFFFFF;
+  --bg-surface-rgb: 255, 255, 255;
+  --bg-card: #FFFFFF;
+  --bg-input: #F1F5F9;
+  --border-color: #E2E8F0;
+  --border-color-rgb: 226, 232, 240;
+  --text-primary: #000000;
+  --text-primary-rgb: 0, 0, 0;
+  --text-secondary: #000000;
+  --text-secondary-rgb: 0, 0, 0;
+  --text-dim: #000000;
+  --text-dim-rgb: 0, 0, 0;
+  --accent-glow: rgba(0, 212, 255, 0.02);
+  --scrollbar-track: #F8FAFC;
+  --scrollbar-thumb: #E2E8F0;
+
+  /* FUNCTIONAL COLORS (LIGHT) */
+  --color-accent: #0ea5e9;
+  --color-accent-rgb: 14, 165, 233;
+  --color-success: #10b981;
+  --color-success-rgb: 16, 185, 129;
+  --color-danger: #ef4444;
+  --color-danger-rgb: 239, 68, 68;
+  --color-warn: #f59e0b;
+  --color-warn-rgb: 245, 158, 11;
+  --color-high: #f97316;
+  --color-high-rgb: 249, 115, 22;
+
+  --bg-overlay: rgba(15, 23, 42, 0.5);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #060A0F; }
+body { background: var(--bg-body); color: var(--text-primary); transition: background 0.3s, color 0.3s; }

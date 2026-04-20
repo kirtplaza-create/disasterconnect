@@ -1,27 +1,37 @@
 <template>
-  <div style="min-height:100vh;background:#060A0F;">
+  <div style="min-height:100vh;background: var(--bg-body); transition: background 0.3s;">
     <div class="topbar">
       <div class="logo">
-        <div class="logo-icon"><Home :size="16" color="#FFD23F" fill="#FFD23F33" /></div>
+        <div class="logo-icon"><Home :size="18" /></div>
         <div>
           <div class="logo-name">DisasterConnect</div>
           <div class="logo-sub">BARANGAY PORTAL</div>
         </div>
       </div>
+      
       <nav class="nav">
-        <button v-for="p in PAGES" :key="p.id" class="nav-btn"
-          :style="{ background: currentPage===p.id ? '#FFD23F18':'transparent', borderBottomColor: currentPage===p.id ? '#FFD23F':'transparent', color: currentPage===p.id ? '#FFD23F':'#4A6080', fontWeight: currentPage===p.id ? 700:400 }"
+        <button v-for="p in PAGES" :key="p.id" 
+          class="nav-btn"
+          :class="{ active: currentPage === p.id }"
           @click="currentPage = p.id">
-          <component :is="p.icon" :size="14" style="margin-right: 6px;" />
-          {{ p.label }}
+          <component :is="p.icon" :size="16" class="nav-icon" />
+          <span>{{ p.label }}</span>
         </button>
       </nav>
+
       <div class="user-area">
-        <div style="text-align:right;">
-          <div class="user-name">{{ user.name }}</div>
-          <div class="user-sub">{{ user.subtitle }}</div>
+        <button class="theme-toggle" @click="toggleTheme" :title="isLightMode ? 'Switch to Dark Mode' : 'Switch to Light Mode'">
+          <Sun v-if="isLightMode" :size="16" />
+          <Moon v-else :size="16" />
+        </button>
+        
+        <div class="profile-chip">
+          <div class="user-info">
+            <div class="user-name">{{ user.name }}</div>
+            <div class="user-sub">{{ user.subtitle }}</div>
+          </div>
+          <button class="logout-btn" @click="$emit('logout')">Logout</button>
         </div>
-        <button class="logout-btn" @click="$emit('logout')">Logout</button>
       </div>
     </div>
 
@@ -62,13 +72,19 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { 
-  Home, 
-  LayoutDashboard, 
-  Users, 
-  Folder, 
   Truck, 
-  ClipboardPlus 
+  ClipboardPlus,
+  Sun,
+  Moon,
+  LayoutDashboard,
+  Users,
+  Folder,
+  Home
 } from 'lucide-vue-next'
+import { inject } from 'vue'
+
+const isLightMode = inject('isLightMode')
+const toggleTheme = inject('toggleTheme')
 import BrgyDashboard    from './brgy/BrgyDashboard.vue'
 import BrgySubmitReport from './brgy/BrgySubmitReport.vue'
 import BrgyReports      from './brgy/BrgyReports.vue'
@@ -106,17 +122,71 @@ const PAGES = [
 </script>
 
 <style scoped>
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:#0D1219;border-bottom:1px solid #1A2535;display:flex;align-items:center;height:56px;padding:0 1.5rem;gap:0}
-.logo{display:flex;align-items:center;gap:10px;margin-right:32px;flex-shrink:0}
-.logo-icon{width:28px;height:28px;border-radius:8px;background:#FFD23F18;border:1px solid #FFD23F33;display:flex;align-items:center;justify-content:center;font-size:14px}
-.logo-name{font-size:13px;font-weight:800;color:#FFD23F;line-height:1}
-.logo-sub{font-size:9px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.08em}
-.nav{display:flex;flex:1;gap:2px}
-.nav-btn{padding:6px 14px;border:none;border-bottom:2px solid transparent;font-size:12px;transition:all .15s;border-radius:0;cursor:pointer;font-family:'Outfit',sans-serif;background:transparent}
-.user-area{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.user-name{font-size:12px;font-weight:700;color:#FFD23F}
-.user-sub{font-size:10px;color:#4A6080}
-.logout-btn{background:#1A2535;border:none;color:#4A6080;padding:5px 12px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'Outfit',sans-serif}
-.logout-btn:hover{color:#E2EAF4}
-.main{margin-top:56px;padding:2rem 2.5rem;min-height:100vh}
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: color-mix(in srgb, var(--bg-surface), transparent 15%);
+  backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: 1px solid var(--border-color);
+  display: flex; align-items: center; height: 72px; padding: 0 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo { display: flex; align-items: center; gap: 14px; margin-right: 48px; flex-shrink: 0; cursor: pointer; }
+.logo-icon { 
+  width: 36px; height: 36px; border-radius: 12px; 
+  background: linear-gradient(135deg, var(--color-warn), #ff8c00); 
+  display: flex; align-items: center; justify-content: center; color: var(--bg-body);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--color-warn), transparent 60%);
+  transition: transform 0.2s ease;
+}
+.logo:hover .logo-icon { transform: scale(1.05) rotate(-3deg); }
+.logo-name { font-size: 16px; font-weight: 900; color: var(--text-primary); line-height: 1; letter-spacing: -0.03em; }
+.logo-sub { font-size: 9px; color: var(--color-warn); font-family: 'DM Mono', monospace; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 3px; font-weight: 700; opacity: 0.9; }
+
+.nav { display: flex; flex: 1; gap: 6px; align-items: center; }
+.nav-btn { 
+  padding: 10px 18px; border: none; border-radius: 10px; font-size: 13.5px; font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; font-family: 'Outfit', sans-serif;
+  background: transparent; color: var(--text-secondary); display: flex; align-items: center;
+}
+.nav-icon { margin-right: 10px; opacity: 0.6; transition: all 0.2s; }
+.nav-btn:hover { background: color-mix(in srgb, var(--text-primary), transparent 95%); color: var(--text-primary); }
+.nav-btn:hover .nav-icon { opacity: 1; transform: translateY(-1px); }
+.nav-btn.active { background: color-mix(in srgb, var(--color-warn), transparent 90%); color: var(--color-warn); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-warn), transparent 96%); }
+.nav-btn.active .nav-icon { opacity: 1; color: var(--color-warn); }
+
+.user-area { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+
+.theme-toggle {
+  background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-secondary);
+  width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.theme-toggle:hover { border-color: var(--color-warn); color: var(--color-warn); transform: translateY(-1px); box-shadow: 0 4px 12px color-mix(in srgb, var(--color-warn), transparent 90%); }
+
+.profile-chip {
+  display: flex; align-items: center; gap: 16px; padding: 5px 5px 5px 16px;
+  background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 40px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.user-info { text-align: right; }
+.user-name { font-size: 12.5px; font-weight: 800; color: var(--text-primary); line-height: 1.2; }
+.user-sub { font-size: 10px; color: var(--text-secondary); font-family: 'DM Mono', monospace; opacity: 0.8; }
+
+.logout-btn { 
+  background: var(--color-warn); color: var(--bg-body); border: none; border-radius: 30px;
+  padding: 8px 18px; font-size: 11.5px; font-weight: 800; cursor: pointer; transition: all 0.2s;
+  font-family: 'Outfit', sans-serif; box-shadow: 0 4px 12px color-mix(in srgb, var(--color-warn), transparent 70%);
+}
+.logout-btn:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 15px color-mix(in srgb, var(--color-warn), transparent 60%); }
+
+.main { margin-top: 72px; padding: 2.5rem; min-height: calc(100vh - 72px); }
+
+@media (max-width: 1024px) {
+  .logo-name { display: none; }
+  .logo-sub { display: none; }
+  .nav-btn span { display: none; }
+  .nav-btn { padding: 10px; }
+  .nav-icon { margin-right: 0; }
+}
 </style>

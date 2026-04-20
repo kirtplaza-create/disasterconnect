@@ -17,10 +17,10 @@
 
     <!-- Top stat row -->
     <div class="stat-grid">
-      <StatBox :icon="Users" label="Registered Families" :value="totalFamilies" color="#FFD23F" />
-      <StatBox :icon="Users"    label="Total Individuals"   :value="totalMembers"  color="#00D4FF" />
-      <StatBox :icon="AlertTriangle"   label="Vulnerable Families"  :value="vulnerable"    color="#FF3B5C" />
-      <StatBox :icon="ClipboardList"    label="Reports Filed"        :value="reports.length" color="#00E5A0" />
+      <StatBox :icon="Users" label="Registered Families" :value="totalFamilies" color="var(--color-warn)" />
+      <StatBox :icon="Users"    label="Total Individuals"   :value="totalMembers"  color="var(--color-accent)" />
+      <StatBox :icon="AlertTriangle"   label="Vulnerable Families"  :value="vulnerable"    color="var(--color-danger)" />
+      <StatBox :icon="ClipboardList"    label="Reports Filed"        :value="reports.length" color="var(--color-success)" />
     </div>
 
     <!-- Middle row -->
@@ -172,10 +172,10 @@ const totalMembers  = computed(() => props.residents.reduce((s,r) => s + r.membe
 const vulnerable    = computed(() => props.residents.filter(r => r.vulnerableGroups && r.vulnerableGroups.length > 0).length)
 
 const statusRows = computed(() => [
-  { label:'At Home',   value: props.residents.filter(r=>r.status==='At Home').length,   color:'#00E5A0', icon: Home },
-  { label:'Evacuated', value: props.residents.filter(r=>r.status==='Evacuated').length, color:'#FFD23F', icon: Footprints },
-  { label:'Relocated', value: props.residents.filter(r=>r.status==='Relocated').length, color:'#00D4FF', icon: Package },
-  { label:'Missing',   value: props.residents.filter(r=>r.status==='Missing').length,   color:'#FF3B5C', icon: HelpCircle },
+  { label:'At Home',   value: props.residents.filter(r=>r.status==='At Home').length,   color:'var(--color-success)', icon: Home },
+  { label:'Evacuated', value: props.residents.filter(r=>r.status==='Evacuated').length, color:'var(--color-warn)', icon: Footprints },
+  { label:'Relocated', value: props.residents.filter(r=>r.status==='Relocated').length, color:'var(--color-accent)', icon: Package },
+  { label:'Missing',   value: props.residents.filter(r=>r.status==='Missing').length,   color:'var(--color-danger)', icon: HelpCircle },
 ])
 
 const needIcons = { Food: Box, Water: Droplet, Medicine: Stethoscope, Blanket: Bed }
@@ -197,6 +197,24 @@ const vulnGroups = computed(() =>
 const recentFamilies = computed(() => [...props.residents].reverse().slice(0,4))
 const recentReports  = computed(() => props.reports.slice(-3).reverse())
 
+// ── Components ────────────────────────────────────────────────────────────────
+import { h } from 'vue'
+const StatBox = (props) => {
+  const { icon, label, value, color, trend } = props
+  return h('div', { class: 'stat-box fade-up' }, [
+    h('div', { class: 'stat-glow', style: { '--c-dim': color + '15' } }),
+    h('div', { class: 'stat-icon', style: { color: color } }, [
+      h(icon, { size: 20 })
+    ]),
+    h('div', { class: 'stat-val' }, value),
+    h('div', { class: 'stat-label' }, label),
+    trend ? h('div', { 
+      class: 'stat-trend ' + (trend > 0 ? 'up' : 'down'),
+      style: { fontSize: '10px', marginTop: '4px', fontWeight: 'bold' }
+    }, (trend > 0 ? '+' : '') + trend + '%') : null
+  ])
+}
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const barWidth = (val, total) => total > 0 ? (val / total) * 100 : 0
 const needBarWidth = (n) => {
@@ -204,45 +222,33 @@ const needBarWidth = (n) => {
   return max > 0 ? (n.total / max) * 100 : 0
 }
 
-const statColor = s => ({pending:'#FFD23F',approved:'#00D4FF',distributed:'#00E5A0',rejected:'#FF3B5C','in-transit':'#00D4FF',dispatched:'#FFD23F',delivered:'#00E5A0'})[s] || '#4A6080'
-const badgeStyle = s => ({ background: statColor(s) + '18', border: `1px solid ${statColor(s)}44`, color: statColor(s), fontSize:'10px', padding:'2px 8px', borderRadius:'2px', fontFamily:'monospace' })
+const statColor = s => ({
+  pending: 'var(--color-warn)',
+  approved: 'var(--color-accent)',
+  distributed: 'var(--color-success)',
+  rejected: 'var(--color-danger)',
+  'in-transit': 'var(--color-accent)',
+  dispatched: 'var(--color-warn)',
+  delivered: 'var(--color-success)',
+  'At Home': 'var(--color-success)',
+  'Evacuated': 'var(--color-warn)',
+  'Missing': 'var(--color-danger)',
+  'Relocated': 'var(--color-accent)'
+})[s] || 'var(--text-secondary)'
 
-const statusColor = s => ({ 'At Home':'#00E5A0', Evacuated:'#FFD23F', Missing:'#FF3B5C', Relocated:'#00D4FF' })[s] || '#4A6080'
-</script>
-
-<!-- Sub-components inlined -->
-<script>
-// StatBox
-const StatBox = {
-  props: ['icon','label','value','color'],
-  template: `
-    <div class="stat-box" :style="{ '--c': color }">
-      <div class="stat-glow"></div>
-      <div class="stat-icon"><component :is="icon" :size="20" /></div>
-      <div class="stat-val mono" :style="{ color }">{{ value }}</div>
-      <div class="stat-label">{{ label }}</div>
-    </div>
-  `
-}
-// StatusBadge
-const StatusBadge = {
-  props: ['status'],
-  template: `<span class="badge" :style="badgeStyle(status)">{{ status }}</span>`,
-  methods: {
-    badgeStyle(s) {
-      const c = ({ 'At Home':'#00E5A0', Evacuated:'#FFD23F', Missing:'#FF3B5C', Relocated:'#00D4FF' })[s] || '#4A6080'
-      return { background: c+'18', border:`1px solid ${c}44`, color:c, fontSize:'10px', padding:'2px 8px', borderRadius:'2px', fontFamily:'monospace' }
-    }
-  }
-}
-export default { components: { StatBox, StatusBadge } }
+const badgeStyle = s => ({ 
+  background: `color-mix(in srgb, ${statColor(s)}, transparent 90%)`, 
+  border: `1px solid color-mix(in srgb, ${statColor(s)}, transparent 70%)`, 
+  color: statColor(s), 
+  fontSize:'10px', padding:'2px 8px', borderRadius:'2px', fontFamily:'monospace' 
+})
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;600;700;800;900&display=swap');
 
 /* ── Tokens ── */
-:root { --bg:#060A0F; --surface:#0D1219; --border:#1A2535; --yellow:#FFD23F; --green:#00E5A0; --red:#FF3B5C; --accent:#00D4FF; --muted:#4A6080; --text:#E2EAF4; }
+/* Colors inherited from global style.css */
 
 /* ── Animations ── */
 @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
@@ -251,22 +257,26 @@ export default { components: { StatBox, StatusBadge } }
 .float   { animation: float 3s ease-in-out infinite; }
 
 /* ── Hero ── */
-.hero-banner { background: linear-gradient(135deg, #FFD23F15, #00E5A008); border: 1px solid #FFD23F33; border-radius: 10px; padding: 1.5rem 2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; }
+.hero-banner { 
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-warn), transparent 91%), color-mix(in srgb, var(--color-success), transparent 96%)); 
+  border: 1px solid color-mix(in srgb, var(--color-warn), transparent 80%); 
+  border-radius: 10px; padding: 1.5rem 2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; 
+}
 .hero-icon   { font-size: 40px; }
 .hero-text   { flex: 1; }
-.portal-label{ font-size: 11px; color: #FFD23F; font-family: monospace; letter-spacing: .1em; margin-bottom: 4px; }
-.hero-title  { font-size: 20px; font-weight: 900; margin-bottom: 4px; color: #E2EAF4; }
-.hero-sub    { font-size: 13px; color: #4A6080; }
+.portal-label{ font-size: 11px; color: var(--color-warn); font-family: monospace; letter-spacing: .1em; margin-bottom: 4px; }
+.hero-title  { font-size: 20px; font-weight: 900; margin-bottom: 4px; color: var(--text-primary); }
+.hero-sub    { font-size: 13px; color: var(--text-secondary); }
 .hero-actions{ display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* ── Buttons ── */
-.btn-primary { background: #FFD23F; color: #060A0F; border: none; border-radius: 6px; padding: 9px 20px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: opacity .2s; font-family: 'Outfit', sans-serif; }
+.btn-primary { background: var(--color-warn); color: var(--bg-body); border: none; border-radius: 6px; padding: 9px 20px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: opacity .2s; font-family: 'Outfit', sans-serif; }
 .btn-primary:hover { opacity: .8; }
 .btn-primary.sm   { font-size: 11px; padding: 6px 14px; }
 .btn-primary.full-w { width: 100%; justify-content: center; }
-.btn-outline { background: transparent; border: 1px solid #FFD23F; color: #FFD23F; border-radius: 6px; padding: 9px 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity .2s; font-family: 'Outfit', sans-serif; }
+.btn-outline { background: transparent; border: 1px solid var(--color-warn); color: var(--color-warn); border-radius: 6px; padding: 9px 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity .2s; font-family: 'Outfit', sans-serif; }
 .btn-outline:hover { opacity: .8; }
-.link-btn    { background: none; border: none; color: #4A6080; font-size: 11px; cursor: pointer; text-decoration: underline; }
+.link-btn    { background: none; border: none; color: var(--text-secondary); font-size: 11px; cursor: pointer; text-decoration: underline; }
 
 /* ── Grids ── */
 .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -274,67 +284,72 @@ export default { components: { StatBox, StatusBadge } }
 .three-col { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 16px; }
 
 /* ── Cards ── */
-.card         { background: #0D1219; border: 1px solid #1A2535; border-radius: 8px; padding: 1.25rem; }
-.card-header  { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: #FFD23F; margin-bottom: 14px; }
-.card-title   { font-size: 13px; font-weight: 700; color: #FFD23F; margin-bottom: 14px; }
-.card-title.red   { color: #FF3B5C; }
-.card-title.green { color: #00E5A0; }
+.card         { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; }
+.card-header  { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; color: var(--color-warn); margin-bottom: 14px; }
+.card-title   { font-size: 13px; font-weight: 700; color: var(--color-warn); margin-bottom: 14px; }
+.card-title.red   { color: var(--color-danger); }
+.card-title.green { color: var(--color-success); }
 
 /* ── Stat Box ── */
-.stat-box   { background: #0D1219; border: 1px solid #1A2535; border-radius: 8px; padding: 1.2rem; position: relative; overflow: hidden; }
-.stat-glow  { position: absolute; top: 0; right: 0; width: 60px; height: 60px; background: var(--c, #FFD23F08); border-radius: 0 8px 0 60px; }
+.stat-box   { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.2rem; position: relative; overflow: hidden; }
+.stat-glow  { position: absolute; top: 0; right: 0; width: 60px; height: 60px; background: var(--c-dim, var(--color-warn-dim)); border-radius: 0 8px 0 60px; }
 .stat-icon  { font-size: 20px; margin-bottom: 8px; }
 .stat-val   { font-size: 28px; font-weight: 900; line-height: 1; }
-.stat-label { font-size: 11px; color: #4A6080; font-family: monospace; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
+.stat-label { font-size: 11px; color: var(--text-secondary); font-family: monospace; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; }
 
 /* ── Status rows ── */
-.status-row   { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #1A2535; }
+.status-row   { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
 .status-icon  { font-size: 16px; width: 24px; text-align: center; }
-.status-label { flex: 1; font-size: 13px; color: #E2EAF4; }
+.status-label { flex: 1; font-size: 13px; color: var(--text-primary); }
 .status-val   { font-family: monospace; font-size: 14px; font-weight: 800; width: 20px; text-align: right; }
-.row-footer   { display: flex; justify-content: space-between; font-size: 12px; color: #4A6080; margin-top: 12px; }
+.row-footer   { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); margin-top: 12px; }
 
 /* ── Bar ── */
-.bar-wrap  { width: 80px; height: 6px; background: #1A2535; border-radius: 3px; overflow: hidden; }
+.bar-wrap  { width: 80px; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; }
 .bar-fill  { height: 100%; border-radius: 3px; transition: width .8s ease; }
-.yellow-fill { background: #FFD23F; }
+.yellow-fill { background: var(--color-warn); }
 
 /* ── Needs ── */
-.need-row    { padding: 10px 0; border-bottom: 1px solid #1A2535; }
+.need-row    { padding: 10px 0; border-bottom: 1px solid var(--border-color); }
 .need-top    { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
 .need-icon   { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
-.need-label  { flex: 1; font-size: 13px; font-weight: 600; color: #E2EAF4; }
+.need-label  { flex: 1; font-size: 13px; font-weight: 600; color: var(--text-primary); }
 .need-total  { text-align: right; }
-.need-unit   { font-size: 10px; color: #4A6080; margin-left: 3px; }
+.need-unit   { font-size: 10px; color: var(--text-secondary); margin-left: 3px; }
 .need-bar-row{ display: flex; align-items: center; gap: 8px; }
 .need-bar-row .bar-wrap { flex: 1; width: auto; }
-.need-meta   { font-size: 10px; color: #4A6080; white-space: nowrap; flex-shrink: 0; }
+.need-meta   { font-size: 10px; color: var(--text-secondary); white-space: nowrap; flex-shrink: 0; }
 
 /* ── Vulnerable ── */
 .vuln-list  { display: flex; flex-direction: column; gap: 8px; }
-.vuln-row   { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #060A0F; border: 1px solid #1A2535; border-radius: 6px; font-size: 12px; color: #E2EAF4; }
+.vuln-row   { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 6px; font-size: 12px; color: var(--text-primary); }
 
 /* ── Family list ── */
 .family-list { display: flex; flex-direction: column; gap: 8px; }
-.family-row  { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #060A0F; border: 1px solid #1A2535; border-radius: 6px; cursor: pointer; transition: border-color .2s; }
-.family-row:hover { border-color: #FFD23F55; }
-.family-icon { width: 32px; height: 32px; border-radius: 8px; background: #FFD23F15; border: 1px solid #FFD23F33; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.family-row  { display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; transition: border-color .2s; }
+.family-row:hover { border-color: color-mix(in srgb, var(--color-warn), transparent 66%); }
+.family-icon { 
+  width: 32px; height: 32px; border-radius: 8px; 
+  background: color-mix(in srgb, var(--color-warn), transparent 91%); 
+  border: 1px solid color-mix(in srgb, var(--color-warn), transparent 80%); 
+  display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; 
+}
 .family-info { flex: 1; min-width: 0; }
-.family-name { font-size: 13px; font-weight: 700; color: #FFD23F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.family-meta { font-size: 11px; color: #4A6080; }
+.family-name { font-size: 13px; font-weight: 700; color: var(--color-warn); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.family-meta { font-size: 11px; color: var(--text-secondary); }
 
 /* ── Report mini ── */
 .report-mini-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-.report-mini      { padding: 8px 10px; background: #060A0F; border: 1px solid #1A2535; border-radius: 6px; }
+.report-mini      { padding: 8px 10px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 6px; }
 .report-mini-top  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-.report-mini-type { font-size: 12px; font-weight: 700; color: #E2EAF4; }
-.report-mini-sub  { font-size: 11px; color: #4A6080; }
+.report-mini-type { font-size: 12px; font-weight: 700; color: var(--text-primary); }
+.report-mini-sub  { font-size: 11px; color: var(--text-secondary); }
 
 /* ── Shared ── */
 .mono   { font-family: monospace; }
-.yellow { color: #FFD23F; font-weight: 700; }
-.red    { color: #FF3B5C; font-weight: 800; }
-.green  { color: #00E5A0; }
+.yellow { color: var(--color-warn); font-weight: 700; }
+.red    { color: var(--color-danger); font-weight: 800; }
+.green  { color: var(--color-success); }
 .badge  { font-size: 10px; padding: 2px 8px; border-radius: 2px; font-family: monospace; }
-.empty-sm { text-align: center; padding: 1.5rem; color: #4A6080; font-size: 13px; display: flex; flex-direction: column; align-items: center; }
+.empty-sm { text-align: center; padding: 1.5rem; color: var(--text-secondary); font-size: 13px; display: flex; flex-direction: column; align-items: center; }
 </style>

@@ -4,11 +4,15 @@
 
     <!-- ── LOGO ── -->
     <div class="sidebar-logo">
-      <div class="logo-icon"><Zap :size="16" color="#00D4FF" fill="#00D4FF33" /></div>
-      <div>
+      <div class="logo-icon"><Zap :size="16" color="var(--color-accent)" :fill="`color-mix(in srgb, var(--color-accent), transparent 80%)`" /></div>
+      <div style="flex: 1">
         <div class="logo-name">DisasterConnect</div>
         <div class="logo-sub">LGU COMMAND SYSTEM</div>
       </div>
+      <button class="theme-toggle" @click="toggleTheme" :title="isLightMode ? 'Switch to Dark Mode' : 'Switch to Light Mode'">
+        <Sun v-if="isLightMode" :size="14" />
+        <Moon v-else :size="14" />
+      </button>
     </div>
 
     <!-- ── LIVE STATUS ── -->
@@ -37,7 +41,7 @@
 
     <!-- ── BOTTOM: logged-in user info ── -->
     <div class="sidebar-footer">
-      <div class="footer-avatar"><Landmark :size="16" color="#00D4FF" /></div>
+      <div class="footer-avatar"><Landmark :size="16" color="var(--color-accent)" /></div>
       <div class="footer-info">
         <div class="footer-name">{{ user.name }}</div>
         <div class="footer-sub">{{ user.subtitle }}</div>
@@ -64,8 +68,14 @@ import {
   BarChart3, 
   Bot, 
   LogOut,
-  Landmark
+  Landmark,
+  Sun,
+  Moon
 } from 'lucide-vue-next'
+import { inject } from 'vue'
+
+const isLightMode = inject('isLightMode')
+const toggleTheme = inject('toggleTheme')
 // ─── PROPS ────────────────────────────────────────────────────────────────────
 defineProps({
   currentPage: { type: String,  required: true },  // which page is active
@@ -98,8 +108,8 @@ const NAV_ITEMS = [
 .sidebar {
   width: 220px;
   min-height: 100vh;
-  background: #0D1219;
-  border-right: 1px solid #1A2535;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -113,12 +123,12 @@ const NAV_ITEMS = [
   align-items: center;
   gap: 10px;
   padding: 1.25rem;
-  border-bottom: 1px solid #1A2535;
+  border-bottom: 1px solid var(--border-color);
 }
 .logo-icon {
   width: 32px; height: 32px;
-  background: #00D4FF15;
-  border: 1px solid #00D4FF33;
+  background: color-mix(in srgb, var(--color-accent), transparent 91%);
+  border: 1px solid color-mix(in srgb, var(--color-accent), transparent 73%);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-size: 16px;
@@ -127,15 +137,33 @@ const NAV_ITEMS = [
 .logo-name {
   font-size: 13px;
   font-weight: 900;
-  color: #00D4FF;
+  color: var(--color-accent);
   line-height: 1;
   margin-bottom: 2px;
 }
 .logo-sub {
   font-size: 9px;
-  color: #4A6080;
+  color: var(--text-secondary);
   font-family: 'DM Mono', monospace;
   letter-spacing: 0.07em;
+}
+.theme-toggle {
+  background: var(--bg-body);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.theme-toggle:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-dim);
 }
 
 /* ── LIVE STATUS ── */
@@ -144,34 +172,38 @@ const NAV_ITEMS = [
   align-items: center;
   gap: 8px;
   padding: 0.6rem 1.25rem;
-  border-bottom: 1px solid #1A2535;
+  border-bottom: 1px solid var(--border-color);
 }
 .pulse-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: #00E5A0;
+  background: var(--color-success);
+  box-shadow: 0 0 8px var(--color-success);
   animation: pulse 1.8s ease-in-out infinite;
   flex-shrink: 0;
 }
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.2; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--color-success); }
+  50%       { opacity: 0.4; box-shadow: 0 0 2px var(--color-success); }
 }
 .status-text {
   font-size: 10px;
-  color: #00E5A0;
-  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  color: var(--color-success);
+  font-family: var(--font-mono);
   letter-spacing: 0.07em;
   flex: 1;
 }
 .alert-badge {
-  background: #FF3B5C;
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-danger), color-mix(in srgb, var(--color-danger), black 15%));
+  color: #ffffff;
   font-size: 10px;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 10px;
-  font-family: 'DM Mono', monospace;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-family: var(--font-mono);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-danger), transparent 50%);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 /* ── NAV ── */
@@ -188,27 +220,26 @@ const NAV_ITEMS = [
   cursor: pointer;
   border-left: 2px solid transparent;
   transition: all 0.15s;
-  color: #4A6080;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 .nav-item:hover {
-  background: #00D4FF08;
-  color: #E2EAF4;
-  border-left-color: #00D4FF44;
+  background: var(--accent-glow);
+  color: var(--text-primary);
+  border-left-color: var(--color-accent-border);
 }
 .nav-item.active {
-  background: #00D4FF10;
-  color: #E2EAF4;
-  border-left-color: #00D4FF;
+  background: var(--accent-glow);
+  color: var(--text-primary);
+  border-left-color: var(--color-accent);
   font-weight: 600;
 }
 .nav-icon  { font-size: 14px; flex-shrink: 0; width: 18px; text-align: center; }
 .nav-label { flex: 1; }
 .ai-badge  {
   font-size: 9px;
-  background: #00D4FF18;
-  border: 1px solid #00D4FF44;
-  color: #00D4FF;
+  border: 1px solid color-mix(in srgb, var(--color-accent), transparent 73%);
+  color: var(--color-accent);
   padding: 1px 5px;
   border-radius: 3px;
   font-family: 'DM Mono', monospace;
@@ -221,24 +252,24 @@ const NAV_ITEMS = [
   align-items: center;
   gap: 10px;
   padding: 1rem 1.25rem;
-  border-top: 1px solid #1A2535;
+  border-top: 1px solid var(--border-color);
 }
 .footer-avatar {
   width: 32px; height: 32px;
-  background: #00D4FF12;
-  border: 1px solid #00D4FF33;
+  background: color-mix(in srgb, var(--color-accent), transparent 93%);
+  border: 1px solid color-mix(in srgb, var(--color-accent), transparent 73%);
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-size: 15px;
   flex-shrink: 0;
 }
 .footer-info  { flex: 1; overflow: hidden; }
-.footer-name  { font-size: 12px; font-weight: 700; color: #E2EAF4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.footer-sub   { font-size: 10px; color: #4A6080; }
+.footer-name  { font-size: 12px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.footer-sub   { font-size: 10px; color: var(--text-secondary); }
 .footer-logout {
   background: transparent;
-  border: 1px solid #1A2535;
-  color: #4A6080;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   width: 24px; height: 24px;
   border-radius: 4px;
   font-size: 10px;
@@ -247,8 +278,8 @@ const NAV_ITEMS = [
   flex-shrink: 0;
 }
 .footer-logout:hover {
-  background: #FF3B5C18;
-  border-color: #FF3B5C44;
-  color: #FF3B5C;
+  background: color-mix(in srgb, var(--color-danger), transparent 91%);
+  border-color: color-mix(in srgb, var(--color-danger), transparent 73%);
+  color: var(--color-danger);
 }
 </style>

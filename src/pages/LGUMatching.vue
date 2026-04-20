@@ -55,7 +55,7 @@
               <span class="inv-qty" :class="{ 'low': i.low }">{{ (i.available || 0).toLocaleString() }}</span>
             </div>
             <div class="progress-bg">
-              <div class="progress-fill" :style="{ width: getInvPct(i) + '%', background: i.low ? '#FF3B5C' : '#00E5A0' }" />
+              <div class="progress-fill" :style="{ width: getInvPct(i) + '%', background: i.low ? 'var(--color-danger)' : 'var(--color-success)' }" />
             </div>
           </div>
         </div>
@@ -64,13 +64,13 @@
       <!-- ── RIGHT: AI Output ── -->
       <div class="card">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-          <div class="pulse-dot" style="background: #FF6B35;" />
+          <div class="pulse-dot" style="background: var(--color-high);" />
           <div class="card-title">DisasterConnect AI Allocation Output</div>
         </div>
 
         <!-- Loading spinner -->
         <div v-if="loading" class="ai-loader">
-          <div class="spinner" style="border-top-color: #FF6B35;" />
+          <div class="spinner" style="border-top-color: var(--color-high);" />
           <span class="spinner-text">Optimizing distribution plan...</span>
         </div>
 
@@ -81,7 +81,7 @@
         </div>
 
         <!-- Error state -->
-        <div v-else-if="result.error" style="color: #FF3B5C; padding: 1rem; font-size: 13px;">
+        <div v-else-if="result.error" style="color: var(--color-danger); padding: 1rem; font-size: 13px;">
           {{ result.error }}
         </div>
 
@@ -90,20 +90,20 @@
 
           <!-- Matching Efficiency Stats -->
           <div class="score-grid">
-            <div class="score-box" :style="{ background: '#00D4FF12', border: '1px solid #00D4FF44' }">
-              <div class="score-label">MATCH EFFIENCY</div>
-              <div class="score-value" style="color: #00D4FF">{{ result.matchEfficiencyScore }}%</div>
+            <div class="score-box" :style="{ background: 'color-mix(in srgb, var(--color-accent), transparent 93%)', border: '1px solid color-mix(in srgb, var(--color-accent), transparent 73%)' }">
+              <div class="score-label">MATCH EFFICIENCY</div>
+              <div class="score-value" style="color: var(--color-accent)">{{ result.matchEfficiencyScore }}%</div>
               <div class="score-sub">Resource Optimization</div>
               <div class="progress-bg">
-                <div class="progress-fill" :style="{ width: result.matchEfficiencyScore + '%', background: '#00D4FF' }" />
+                <div class="progress-fill" :style="{ width: result.matchEfficiencyScore + '%', background: 'var(--color-accent)' }" />
               </div>
             </div>
-            <div class="score-box" :style="{ background: '#FF6B3512', border: '1px solid #FF6B3544' }">
+            <div class="score-box" :style="{ background: 'color-mix(in srgb, var(--color-high), transparent 93%)', border: '1px solid color-mix(in srgb, var(--color-high), transparent 73%)' }">
               <div class="score-label">SUPPLY READINESS</div>
-              <div class="score-value" style="color: #FF6B35">{{ result.resourceReadinessScore }}%</div>
+              <div class="score-value" style="color: var(--color-high)">{{ result.resourceReadinessScore }}%</div>
               <div class="score-sub">Inventory Coverage</div>
               <div class="progress-bg">
-                <div class="progress-fill" :style="{ width: result.resourceReadinessScore + '%', background: '#FF6B35' }" />
+                <div class="progress-fill" :style="{ width: result.resourceReadinessScore + '%', background: 'var(--color-high)' }" />
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@
                   <td>
                     <span class="table-badge" :style="badgeStyle(a.priority)">{{ a.priority }}</span>
                   </td>
-                  <td style="color: #4A6080; font-size: 11px;">{{ a.source }}</td>
+                  <td style="color: var(--text-secondary); font-size: 11px;">{{ a.source }}</td>
                 </tr>
               </tbody>
             </table>
@@ -177,14 +177,14 @@
 
           <!-- Approval Area -->
           <div v-if="report && report.status !== 'approved_match'" class="approval-area">
-            <p style="font-size: 12px; color: #4A6080; margin-bottom: 12px; font-style: italic;">Authorize matching results for distribution.</p>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; font-style: italic;">Authorize matching results for distribution.</p>
             <button class="btn-approve" @click="approveMatch" :disabled="approving" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
               <CheckCircle v-if="!approving" :size="18" />
               {{ approving ? 'Approving...' : 'Approve & Finalize Allocation' }}
             </button>
           </div>
           <div v-else-if="report && report.status === 'approved_match'" class="approval-area success">
-            <div style="color: #00E5A0; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <div style="color: var(--color-success); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;">
               <CheckCircle :size="16" /> Allocation Finalized
             </div>
           </div>
@@ -211,10 +211,14 @@ const props = defineProps({
 const emit = defineEmits(['update:reports'])
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
-const getStatusColor = (s) => ({ Optimized: '#00E5A0', Partial: '#FFD23F', 'Critical Gap': '#FF3B5C' })[s] || '#4A6080'
+const getStatusColor = (s) => ({ Optimized: 'var(--color-success)', Partial: 'var(--color-warn)', 'Critical Gap': 'var(--color-danger)' })[s] || 'var(--text-secondary)'
 const getInvPct = (i) => i.low ? 20 : Math.min(((i.available || 0) / 1000) * 100, 100)
-const sevColor = (s) => ({ Critical: '#FF3B5C', High: '#FF6B35', Moderate: '#FFD23F', Low: '#00E5A0' })[s] || '#4A6080'
-const badgeStyle = (s) => ({ background: sevColor(s) + '18', border: `1px solid ${sevColor(s)}44`, color: sevColor(s) })
+const sevColor = (s) => ({ Critical: 'var(--color-danger)', High: 'var(--color-high)', Moderate: 'var(--color-warn)', Low: 'var(--color-success)' })[s] || 'var(--text-secondary)'
+const badgeStyle = (s) => ({ 
+  background: `color-mix(in srgb, ${sevColor(s)}, transparent 90%)`, 
+  border: `1px solid color-mix(in srgb, ${sevColor(s)}, transparent 70%)`, 
+  color: sevColor(s) 
+})
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 const sel       = ref(props.reports[0]?.id || null)
@@ -315,37 +319,37 @@ async function approveMatch() {
 .spin-slow { animation: spin 3s linear infinite; }
 .fade-up { animation: fadeUp 0.4s ease forwards; }
 
-.module-label { font-size:10px; color:#00D4FF; font-family:'DM Mono',monospace; letter-spacing:0.12em; margin-bottom:4px; }
+.module-label { font-size:10px; color:var(--color-accent); font-family:'DM Mono',monospace; letter-spacing:0.12em; margin-bottom:4px; }
 .page-title   { font-size:22px; font-weight:800; }
-.page-sub     { color:#4A6080; font-size:13px; margin-top:4px; }
+.page-sub     { color:var(--text-secondary); font-size:13px; margin-top:4px; }
 
 .two-col { display:grid; grid-template-columns:300px 1fr; gap:16px; }
 
-.card      { background:#0D1219; border:1px solid #1A2535; border-radius:6px; padding:1.25rem; }
+.card      { background:var(--bg-surface); border:1px solid var(--border-color); border-radius:6px; padding:1.25rem; }
 .card-title{ font-size:14px; font-weight:700; }
 
 .field-select {
-  width:100%; background:#060A0F; border:1px solid #1A2535;
-  border-radius:4px; padding:8px 12px; color:#E2EAF4;
+  width:100%; background:var(--bg-body); border:1px solid var(--border-color);
+  border-radius:4px; padding:8px 12px; color:var(--text-primary);
   font-size:13px; appearance:none; cursor:pointer;
   font-family:'Outfit',sans-serif; outline:none; transition:border-color .2s;
 }
-.field-select:focus { border-color:#00D4FF; }
+.field-select:focus { border-color:var(--color-accent); }
 
-.divider { height:1px; background:#1A2535; margin:1rem 0; }
-.section-label { font-size:11px; color:#4A6080; font-family:'DM Mono',monospace; text-transform:uppercase; margin-bottom:8px; }
+.divider { height:1px; background:var(--border-color); margin:1rem 0; }
+.section-label { font-size:11px; color:var(--text-secondary); font-family:'DM Mono',monospace; text-transform:uppercase; margin-bottom:8px; }
 
-.kv-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #1A2535; }
-.kv-key { font-size:12px; color:#4A6080; }
-.kv-val { font-size:12px; font-family:'DM Mono',monospace; color:#E2EAF4; }
+.kv-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border-color); }
+.kv-key { font-size:12px; color:var(--text-secondary); }
+.kv-val { font-size:12px; font-family:'DM Mono',monospace; color:var(--text-primary); }
 
-.inv-item { font-size: 12px; color: #E2EAF4; }
-.inv-item.low { color: #FF3B5C; }
-.inv-qty { font-size: 11px; font-family: 'DM Mono', monospace; color: #00D4FF; }
-.inv-qty.low { color: #FF3B5C; }
+.inv-item { font-size: 12px; color: var(--text-primary); }
+.inv-item.low { color: var(--color-danger); }
+.inv-qty { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--color-accent); }
+.inv-qty.low { color: var(--color-danger); }
 
 .btn-primary {
-  background:#00D4FF; color:#060A0F; border:none; border-radius:4px;
+  background:var(--color-accent); color:var(--bg-body); border:none; border-radius:4px;
   padding:9px 20px; font-size:13px; font-weight:600; cursor:pointer;
   transition:opacity .2s; display:inline-flex; align-items:center;
   gap:6px; font-family:'Outfit',sans-serif;
@@ -355,46 +359,46 @@ async function approveMatch() {
 
 .pulse-dot { width:8px; height:8px; border-radius:50%; animation:pulse 1.8s ease-in-out infinite; flex-shrink:0; }
 .ai-loader    { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:3rem 0; }
-.spinner      { width:36px; height:36px; border:2px solid #1A2535; border-radius:50%; animation:spin 1s linear infinite; }
-.spinner-text { font-family:'DM Mono',monospace; font-size:12px; color:#4A6080; }
-.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5rem 1rem; color: #4A6080; text-align: center; }
-.empty-icon  { margin-bottom: 16px; color: #1A2535; stroke-width: 1.5; }
+.spinner      { width:36px; height:36px; border:2px solid var(--border-color); border-radius:50%; animation:spin 1s linear infinite; }
+.spinner-text { font-family:'DM Mono',monospace; font-size:12px; color:var(--text-secondary); }
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5rem 1rem; color: var(--text-secondary); text-align: center; }
+.empty-icon  { margin-bottom: 16px; color: var(--border-color); stroke-width: 1.5; }
 .empty-text  { font-size: 14px; font-weight: 500; max-width: 240px; line-height: 1.5; }
 
 .score-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
 .score-box  { border-radius:6px; padding:12px 16px; text-align:center; }
-.score-label{ font-size:10px; color:#4A6080; font-family:'DM Mono',monospace; margin-bottom:4px; }
+.score-label{ font-size:10px; color:var(--text-secondary); font-family:'DM Mono',monospace; margin-bottom:4px; }
 .score-value{ font-size:20px; font-weight:800; line-height:1; margin-bottom:2px; }
-.score-sub  { font-size:10px; color:#4A6080; font-family:'DM Mono',monospace; margin-bottom:6px; }
-.progress-bg  { height:4px; background:#1A2535; border-radius:2px; overflow:hidden; margin-top:4px; }
+.score-sub  { font-size:10px; color:var(--text-secondary); font-family:'DM Mono',monospace; margin-bottom:6px; }
+.progress-bg  { height:4px; background:var(--border-color); border-radius:2px; overflow:hidden; margin-top:4px; }
 .progress-fill{ height:100%; border-radius:2px; transition:width .8s ease; }
 
-.findings-text { font-size:13px; color:#E2EAF4; line-height:1.7; margin-bottom:12px; }
+.findings-text { font-size:13px; color:var(--text-primary); line-height:1.7; margin-bottom:12px; }
 
 .matching-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.matching-table th { text-align: left; padding: 8px; font-size: 11px; color: #4A6080; font-family: 'DM Mono', monospace; font-weight: 400; border-bottom: 1px solid #1A2535; }
-.matching-table td { padding: 10px 8px; border-bottom: 1px solid #1A2535; vertical-align: middle; }
+.matching-table th { text-align: left; padding: 8px; font-size: 11px; color: var(--text-secondary); font-family: 'DM Mono', monospace; font-weight: 400; border-bottom: 1px solid var(--border-color); }
+.matching-table td { padding: 10px 8px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
 .mono { font-family: 'DM Mono', monospace; }
-.green { color: #00E5A0; }
+.green { color: var(--color-success); }
 .table-badge { padding: 2px 8px; border-radius: 2px; font-size: 10px; font-weight: 600; font-family: 'DM Mono', monospace; }
 
 .tags-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
 .tag {
   display:inline-block; padding:2px 10px;
-  background:#00D4FF18; border:1px solid #00D4FF44;
-  color:#00D4FF; font-size:11px; font-family:'DM Mono',monospace;
+  background:color-mix(in srgb, var(--color-accent), transparent 90%); border:1px solid color-mix(in srgb, var(--color-accent), transparent 70%);
+  color:var(--color-accent); font-size:11px; font-family:'DM Mono',monospace;
   border-radius:2px; font-weight:500;
 }
 
-.action-row { display:flex; gap:8px; margin-bottom:6px; font-size:12px; color:#E2EAF4; }
-.action-num { color:#00D4FF; font-family:'DM Mono',monospace; flex-shrink:0; }
-.risk-row  { display:flex; gap:8px; margin-bottom:5px; font-size:12px; color:#E2EAF4; }
-.risk-icon { color:#FF3B5C; flex-shrink:0; }
+.action-row { display:flex; gap:8px; margin-bottom:6px; font-size:12px; color:var(--text-primary); }
+.action-num { color:var(--color-accent); font-family:'DM Mono',monospace; flex-shrink:0; }
+.risk-row  { display:flex; gap:8px; margin-bottom:5px; font-size:12px; color:var(--text-primary); }
+.risk-icon { color:var(--color-danger); flex-shrink:0; }
 
-.needs-warning { margin-top:12px; padding:10px; background:#FF3B5C10; border:1px solid #FF3B5C33; border-radius:4px; font-size:12px; color:#FF3B5C; line-height:1.4; }
+.needs-warning { margin-top:12px; padding:10px; background:color-mix(in srgb, var(--color-danger), transparent 93%); border:1px solid color-mix(in srgb, var(--color-danger), transparent 80%); border-radius:4px; font-size:12px; color:var(--color-danger); line-height:1.4; }
 
-.approval-area { margin-top: 20px; padding: 1.5rem; background: #060A0F; border: 1px dashed #1A2535; border-radius: 8px; text-align: center; }
-.approval-area.success { border: 1px solid #00E5A033; background: #00E5A008; }
-.btn-approve { background: #00E5A0; color: #060A0F; border: none; border-radius: 4px; padding: 12px 24px; font-size: 14px; font-weight: 800; cursor: pointer; width: 100%; transition: opacity 0.2s; }
+.approval-area { margin-top: 20px; padding: 1.5rem; background: var(--bg-body); border: 1px dashed var(--border-color); border-radius: 8px; text-align: center; }
+.approval-area.success { border: 1px solid color-mix(in srgb, var(--color-success), transparent 80%); background: color-mix(in srgb, var(--color-success), transparent 97%); }
+.btn-approve { background: var(--color-success); color: var(--bg-body); border: none; border-radius: 4px; padding: 12px 24px; font-size: 14px; font-weight: 800; cursor: pointer; width: 100%; transition: opacity 0.2s; }
 .btn-approve:disabled { opacity:0.5; }
 </style>

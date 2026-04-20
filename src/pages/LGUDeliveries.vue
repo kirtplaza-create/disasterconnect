@@ -10,10 +10,10 @@
 
     <!-- Stats -->
     <div class="stat-grid">
-      <div class="stat-box"><div class="stat-value" style="color:#00D4FF;">{{ deliveries.length }}</div><div class="stat-label">Total Deliveries</div></div>
-      <div class="stat-box"><div class="stat-value" style="color:#4A6080;">{{ counts.pending }}</div><div class="stat-label">Pending Dispatch</div></div>
-      <div class="stat-box"><div class="stat-value" style="color:#FFD23F;">{{ (counts.dispatched||0) + (counts['in-transit']||0) }}</div><div class="stat-label">In Transit</div></div>
-      <div class="stat-box"><div class="stat-value" style="color:#00E5A0;">{{ counts.delivered||0 }}</div><div class="stat-label">Delivered</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--color-accent);">{{ deliveries.length }}</div><div class="stat-label">Total Deliveries</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--text-secondary);">{{ counts.pending }}</div><div class="stat-label">Pending Dispatch</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--color-warn);">{{ (counts.dispatched||0) + (counts['in-transit']||0) }}</div><div class="stat-label">In Transit</div></div>
+      <div class="stat-box"><div class="stat-value" style="color:var(--color-success);">{{ counts.delivered||0 }}</div><div class="stat-label">Delivered</div></div>
     </div>
 
     <!-- Create form -->
@@ -70,14 +70,14 @@
           <div class="pipeline-wrap">
             <div v-for="(s, i) in statusFlow" :key="s" style="display:flex;align-items:center;flex:1;">
               <div class="pipe-node" :style="{
-                background: i <= currentStep(del) ? statusColor(del.status) : '#1A2535',
-                border: `2px solid ${i <= currentStep(del) ? statusColor(del.status) : '#1A2535'}`,
-                color: i <= currentStep(del) ? '#060A0F' : '#4A6080',
+                background: i <= currentStep(del) ? statusColor(del.status) : 'var(--border-color)',
+                border: `2px solid ${i <= currentStep(del) ? statusColor(del.status) : 'var(--border-color)'}`,
+                color: i <= currentStep(del) ? 'var(--bg-body)' : 'var(--text-secondary)',
               }">
                 <Check v-if="i <= currentStep(del)" :size="10" />
                 <span v-else>{{ i+1 }}</span>
               </div>
-              <div class="pipe-line" :style="{ background: i < currentStep(del) ? statusColor(del.status) : '#1A2535' }" />
+              <div class="pipe-line" :style="{ background: i < currentStep(del) ? statusColor(del.status) : 'var(--border-color)' }" />
             </div>
           </div>
           <div class="pipe-labels">
@@ -90,7 +90,7 @@
             <span class="del-detail"><Truck :size="14" style="margin-right: 4px;" /> <span class="detail-val">{{ del.vehicle }}</span></span>
             <span class="del-detail"><MapPin :size="14" style="margin-right: 4px;" /> <span class="detail-val">{{ del.recipient }}</span></span>
             <span v-if="del.dispatchTime" class="del-detail"><Send :size="14" style="margin-right: 4px;" /> <span class="detail-val">{{ del.dispatchTime }}</span></span>
-            <span v-if="del.arrivalTime" style="font-size:12px;color:#00E5A0; display: flex; align-items: center; gap: 4px;">
+            <span v-if="del.arrivalTime" style="font-size:12px;color:var(--color-success); display: flex; align-items: center; gap: 4px;">
               <CheckCircle :size="14" /> Arrived: <strong>{{ del.arrivalTime }}</strong>
             </span>
           </div>
@@ -98,8 +98,8 @@
           <!-- Items -->
           <div class="item-tags">
             <div v-for="(it,i) in del.items" :key="i" class="item-tag">
-              <span style="color:#00D4FF;font-weight:600;">{{ it.qty?.toLocaleString() }}</span>
-              <span style="color:#4A6080;"> {{ it.unit }} </span>
+              <span style="color:var(--color-accent);font-weight:600;">{{ it.qty?.toLocaleString() }}</span>
+              <span style="color:var(--text-secondary);"> {{ it.unit }} </span>
               <span>{{ it.name }}</span>
             </div>
           </div>
@@ -134,8 +134,12 @@ const statusFlow = ['pending','dispatched','in-transit','delivered']
 const statusIcon = { pending: Clock, dispatched: Package, 'in-transit': Truck, delivered: CheckCircle }
 const nextLabel  = { pending:'Dispatch', dispatched:'Mark In-Transit', 'in-transit':'Confirm Delivered' }
 
-const statusColor = (s) => ({ pending:'#4A6080', dispatched:'#FFD23F', 'in-transit':'#00D4FF', delivered:'#00E5A0' })[s] || '#4A6080'
-const badgeStyle  = (c) => ({ background:c+'18', border:`1px solid ${c}44`, color:c })
+const statusColor = (s) => ({ pending:'var(--text-secondary)', dispatched:'var(--color-warn)', 'in-transit':'var(--color-accent)', delivered:'var(--color-success)' })[s] || 'var(--text-secondary)'
+const badgeStyle  = (c) => ({ 
+  background: `color-mix(in srgb, ${c}, transparent 90%)`, 
+  border: `1px solid color-mix(in srgb, ${c}, transparent 70%)`, 
+  color: c 
+})
 const currentStep = (del) => statusFlow.indexOf(del.status)
 
 const counts = computed(() => {
@@ -222,46 +226,46 @@ async function advanceStatus(id) {
 .fade-up{animation:fadeUp .4s ease forwards}
 .page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
 .page-title{font-size:22px;font-weight:800}
-.page-sub{color:#4A6080;font-size:13px;margin-top:4px}
+.page-sub{color:var(--text-secondary);font-size:13px;margin-top:4px}
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.stat-box{background:#0D1219;border:1px solid #1A2535;border-radius:6px;padding:1.2rem;text-align:center}
+.stat-box{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:6px;padding:1.2rem;text-align:center}
 .stat-value{font-size:28px;font-weight:900;font-family:'DM Mono',monospace;line-height:1;margin-bottom:4px}
-.stat-label{font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
-.form-card{background:#0D1219;border:1px solid #00D4FF44;border-radius:6px;padding:1.25rem;margin-bottom:20px}
-.form-title{font-size:14px;font-weight:700;color:#00D4FF;margin-bottom:14px}
+.stat-label{font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.form-card{background:var(--bg-surface); border:1px solid color-mix(in srgb, var(--color-accent), transparent 73%); border-radius:6px; padding:1.25rem; margin-bottom:20px}
+.form-title{font-size:14px; font-weight:700; color:var(--color-accent); margin-bottom:14px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
 .field{margin-bottom:12px}
-.field-label{display:block;font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.field-input{width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:4px;padding:8px 12px;color:#E2EAF4;font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
-.field-input:focus{border-color:#00D4FF}
+.field-label{display:block;font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.field-input{width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:4px;padding:8px 12px;color:var(--text-primary);font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
+.field-input:focus{border-color:var(--color-accent)}
 .field-select{appearance:none;cursor:pointer}
 .item-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center}
-.remove-btn{background:#FF3B5C18;border:1px solid #FF3B5C44;color:#FF3B5C;border-radius:4px;padding:6px 10px;font-size:12px;cursor:pointer}
-.add-item-btn{background:none;border:1px dashed #1A2535;color:#4A6080;border-radius:4px;padding:6px 16px;font-size:12px;cursor:pointer;width:100%;margin-top:4px}
-.add-item-btn:hover{border-color:#00D4FF44;color:#00D4FF}
-.btn-primary{background:#00D4FF;color:#060A0F;border:none;border-radius:4px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif}
+.remove-btn{background:color-mix(in srgb, var(--color-danger), transparent 90%); border:1px solid color-mix(in srgb, var(--color-danger), transparent 73%); color:var(--color-danger); border-radius:4px; padding:6px 10px; font-size:12px; cursor:pointer}
+.add-item-btn{background:none; border:1px dashed var(--border-color); color:var(--text-secondary); border-radius:4px; padding:6px 16px; font-size:12px; cursor:pointer; width:100%; margin-top:4px}
+.add-item-btn:hover{border-color:color-mix(in srgb, var(--color-accent), transparent 73%); color:var(--color-accent)}
+.btn-primary{background:var(--color-accent);color:var(--bg-body);border:none;border-radius:4px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif}
 .btn-primary:hover{opacity:.85}
-.btn-ghost{background:transparent;border:1px solid #1A2535;color:#E2EAF4;border-radius:4px;padding:9px 20px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
-.btn-ghost:hover{border-color:#00D4FF44;color:#00D4FF}
+.btn-ghost{background:transparent;border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;padding:9px 20px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.btn-ghost:hover{border-color:var(--color-accent)44;color:var(--color-accent)}
 .card-list{display:flex;flex-direction:column;gap:10px}
-.delivery-card{background:#0D1219;border:1px solid #1A2535;border-radius:6px;padding:1.25rem;display:flex;align-items:flex-start;gap:16px}
+.delivery-card{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:6px;padding:1.25rem;display:flex;align-items:flex-start;gap:16px}
 .status-bar{width:4px;min-height:80px;border-radius:2px;flex-shrink:0;margin-top:2px}
 .del-header{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
 .del-icon{font-size:18px}
 .del-name{font-size:14px;font-weight:700}
-.del-id{font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;margin-left:auto}
+.del-id{font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;margin-left:auto}
 .pipeline-wrap{display:flex;align-items:center;margin-bottom:4px}
 .pipe-node{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;font-weight:700}
 .pipe-line{flex:1;height:2px}
 .pipe-labels{display:flex;justify-content:space-between;margin-bottom:10px;padding-right:20px}
-.pipe-label{font-size:9px;color:#4A6080;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
+.pipe-label{font-size:9px;color:var(--text-secondary);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
 .del-details{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:8px}
-.del-detail{font-size:12px;color:#4A6080}
-.detail-val{color:#E2EAF4}
+.del-detail{font-size:12px;color:var(--text-secondary)}
+.detail-val{color:var(--text-primary)}
 .item-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
-.item-tag{background:#060A0F;border:1px solid #1A2535;border-radius:4px;padding:3px 10px;font-size:12px;font-family:'DM Mono',monospace}
-.del-notes{font-size:12px;color:#4A6080;font-style:italic;margin-top:6px}
-.btn-advance{border:none;border-radius:4px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600}
-.btn-success{background:#00E5A018;border:1px solid #00E5A044 !important;color:#00E5A0;border:none}
+.item-tag{background:var(--bg-body);border:1px solid var(--border-color);border-radius:4px;padding:3px 10px;font-size:12px;font-family:'DM Mono',monospace}
+.del-notes{font-size:12px;color:var(--text-secondary);font-style:italic;margin-top:6px}
+.btn-advance{border:none; border-radius:4px; padding:6px 14px; font-size:12px; cursor:pointer; font-family:'Outfit',sans-serif; font-weight:600}
+.btn-success{background:color-mix(in srgb, var(--color-success), transparent 90%); border:1px solid color-mix(in srgb, var(--color-success), transparent 73%) !important; color:var(--color-success); }
 .badge{display:inline-block;padding:2px 10px;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.06em;border-radius:2px;font-weight:500;white-space:nowrap}
 </style>

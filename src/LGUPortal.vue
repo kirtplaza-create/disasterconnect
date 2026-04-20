@@ -106,8 +106,8 @@ const PagePlaceholder = {
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:12px;text-align:center">
       <div style="font-size:52px;margin-bottom:8px">{{ icon }}</div>
       <h2 style="font-size:24px;font-weight:900;" :style="{ color }">{{ title }}</h2>
-      <p style="font-size:13px;color:#4A6080">This page is coming next!</p>
-      <div style="margin-top:8px;padding:5px 16px;background:#0D1219;border:1px solid #1A2535;border-radius:20px;font-size:11px;color:#4A6080;font-family:'DM Mono',monospace">
+      <p style="font-size:13px;color: var(--text-secondary)">This page is coming next!</p>
+      <div style="margin-top:8px;padding:5px 16px;background: var(--bg-surface);border:1px solid var(--border-color);border-radius:20px;font-size:11px;color: var(--text-secondary);font-family:'DM Mono',monospace">
         COMING SOON
       </div>
     </div>
@@ -140,7 +140,7 @@ const alerts = computed(() =>
 .lgu-shell {
   display: flex;
   min-height: 100vh;
-  background: #060A0F;
+  background: var(--bg-body);
 }
 .lgu-main {
   margin-left: 220px;   /* same width as the sidebar */

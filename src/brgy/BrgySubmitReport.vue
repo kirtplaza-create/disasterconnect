@@ -3,7 +3,7 @@
 
     <!-- Success Screen -->
     <div v-if="done" class="success-screen fade-up">
-      <div class="success-icon float"><CheckCircle :size="64" color="#00E5A0" /></div>
+      <div class="success-icon float"><CheckCircle :size="64" color="var(--color-success)" /></div>
       <div class="success-title">Report Submitted to LGU!</div>
       <div class="success-sub">
         Your disaster report has been sent to the LGU Operations Center for review.
@@ -66,7 +66,7 @@
             <div class="severity-row">
               <button v-for="s in SEVERITIES" :key="s" class="sev-btn"
                 :class="{ active: form.severity === s }"
-                :style="form.severity===s ? { borderColor: sevColor(s), background: sevColor(s)+'18', color: sevColor(s) } : {}"
+                :style="form.severity===s ? { borderColor: sevColor(s), background: sevDimColor(s), color: sevColor(s) } : {}"
                 @click="form.severity = s">{{ s }}</button>
             </div>
           </div>
@@ -93,26 +93,26 @@
 
             <div class="auto-grid">
               <div style="margin-bottom:12px">
-                <label style="display:flex;align-items:center;font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Families Affected<span style="font-size:10px;color:#00E5A0;background:#00E5A015;border:1px solid #00E5A033;border-radius:3px;padding:1px 7px;margin-left:6px;letter-spacing:.04em;font-family:monospace">AUTO</span></label>
-                <div style="width:100%;background:#00E5A008;border:1px solid #00E5A033;border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:#FFD23F">
+                <label style="display:flex;align-items:center;font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Families Affected<span class="auto-tag">AUTO</span></label>
+                <div style="width:100%;background:var(--color-success-dim);border:1px solid var(--color-success-dim);border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:var(--color-warn)">
                   {{ autoFamilies ?? '—' }}
                 </div>
               </div>
               <div style="margin-bottom:12px">
-                <label style="display:flex;align-items:center;font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Total Individuals<span style="font-size:10px;color:#00E5A0;background:#00E5A015;border:1px solid #00E5A033;border-radius:3px;padding:1px 7px;margin-left:6px;letter-spacing:.04em;font-family:monospace">AUTO</span></label>
-                <div style="width:100%;background:#00E5A008;border:1px solid #00E5A033;border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:#FFD23F">
+                <label style="display:flex;align-items:center;font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Total Individuals<span class="auto-tag">AUTO</span></label>
+                <div style="width:100%;background:var(--color-success-dim);border:1px solid var(--color-success-dim);border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:var(--color-warn)">
                   {{ autoIndividuals ?? '—' }}
                 </div>
               </div>
               <div style="margin-bottom:12px">
-                <label style="display:flex;align-items:center;font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Elderly (Age > 60)<span style="font-size:10px;color:#00E5A0;background:#00E5A015;border:1px solid #00E5A033;border-radius:3px;padding:1px 7px;margin-left:6px;letter-spacing:.04em;font-family:monospace">AUTO</span></label>
-                <div style="width:100%;background:#00E5A008;border:1px solid #00E5A033;border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:#FF6B35">
+                <label style="display:flex;align-items:center;font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Elderly (Age > 60)<span class="auto-tag">AUTO</span></label>
+                <div style="width:100%;background:var(--color-success-dim);border:1px solid var(--color-success-dim);border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:var(--color-high)">
                   {{ autoElderly ?? '—' }}
                 </div>
               </div>
               <div style="margin-bottom:12px">
-                <label style="display:flex;align-items:center;font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Children (Age < 17)<span style="font-size:10px;color:#00E5A0;background:#00E5A015;border:1px solid #00E5A033;border-radius:3px;padding:1px 7px;margin-left:6px;letter-spacing:.04em;font-family:monospace">AUTO</span></label>
-                <div style="width:100%;background:#00E5A008;border:1px solid #00E5A033;border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:#00D4FF">
+                <label style="display:flex;align-items:center;font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Children (Age < 17)<span class="auto-tag">AUTO</span></label>
+                <div style="width:100%;background:var(--color-success-dim);border:1px solid var(--color-success-dim);border-radius:6px;padding:10px 12px;font-size:14px;font-weight:700;font-family:monospace;color:var(--color-accent)">
                   {{ autoChildren ?? '—' }}
                 </div>
               </div>
@@ -151,7 +151,7 @@
                   <component :is="s.icon" :size="20" :color="s.color" />
                   <div>
                     <div class="supply-label">{{ s.label }}</div>
-                    <div class="supply-val mono" :style="{ color: s.value > 0 ? s.color : '#4A6080' }">
+                    <div class="supply-val mono" :style="{ color: s.value > 0 ? s.color : 'var(--text-secondary)' }">
                       {{ s.value }} <span class="supply-unit">{{ s.unit }}</span>
                     </div>
                   </div>
@@ -164,7 +164,7 @@
 
             <div class="submit-notice">
               <AlertTriangle :size="14" style="display:inline; margin-right:6px;" /> Submitting sends this report directly to the
-              <strong style="color:#FFD23F">LGU Operations Center</strong> for review and relief allocation.
+              <strong style="color:var(--color-warn)">LGU Operations Center</strong> for review and relief allocation.
             </div>
 
             <button class="btn-primary full-w" :disabled="!form.desc.trim()" @click="submit">
@@ -247,10 +247,10 @@ const summaryRows = computed(() => [
 ])
 
 const supplyItems = computed(() => [
-  { icon: Box,         label:'Food Packs',   value:autoFoodPacks.value,   unit:'packs',  color:'#FFD23F' },
-  { icon: Droplet,     label:'Water',         value:autoWaterLiters.value, unit:'liters', color:'#00D4FF' },
-  { icon: Stethoscope, label:'Medicine Kits', value:autoMedKits.value,     unit:'kits',   color:'#FF3B5C' },
-  { icon: Bed,         label:'Blankets',      value:autoBlankets.value,    unit:'pcs',    color:'#00E5A0' },
+  { icon: Box,         label:'Food Packs',   value:autoFoodPacks.value,   unit:'packs',  color:'var(--color-warn)' },
+  { icon: Droplet,     label:'Water',         value:autoWaterLiters.value, unit:'liters', color:'var(--color-accent)' },
+  { icon: Stethoscope, label:'Medicine Kits', value:autoMedKits.value,     unit:'kits',   color:'var(--color-danger)' },
+  { icon: Bed,         label:'Blankets',      value:autoBlankets.value,    unit:'pcs',    color:'var(--color-success)' },
 ])
 const noSupplies = computed(() => supplyItems.value.every(s => s.value === 0))
 
@@ -296,7 +296,8 @@ const reset = () => {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-const sevColor = s => ({ Low:'#00E5A0', Moderate:'#FFD23F', High:'#FF6B35', Critical:'#FF3B5C' })[s] || '#4A6080'
+const sevColor = s => ({ Low:'var(--color-success)', Moderate:'var(--color-warn)', High:'var(--color-high)', Critical:'var(--color-danger)' })[s] || 'var(--text-secondary)'
+const sevDimColor = s => ({ Low:'var(--color-success-dim)', Moderate:'var(--color-warn-dim)', High:'var(--color-high-dim)', Critical:'var(--color-danger-dim)' })[s] || 'transparent'
 
 
 </script>
@@ -312,71 +313,71 @@ const sevColor = s => ({ Low:'#00E5A0', Moderate:'#FFD23F', High:'#FF6B35', Crit
 
 /* Page */
 .page-header{margin-bottom:20px}
-.portal-label{font-size:10px;color:#FFD23F;font-family:monospace;letter-spacing:.12em;margin-bottom:4px}
-.page-title{font-size:22px;font-weight:900;color:#E2EAF4}
-.page-sub{color:#4A6080;font-size:13px;margin-top:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.auto-tag{font-size:10px;color:#00E5A0;background:#00E5A015;border:1px solid #00E5A033;border-radius:3px;padding:1px 7px;font-family:monospace}
-.warn-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#FFD23F0a;border:1px solid #FFD23F44;border-radius:8px;margin-bottom:20px;font-size:13px;color:#FFD23F}
+.portal-label{font-size:10px;color:var(--color-warn);font-family:monospace;letter-spacing:.12em;margin-bottom:4px}
+.page-title{font-size:22px;font-weight:900;color:var(--text-primary)}
+.page-sub{color:var(--text-secondary);font-size:13px;margin-top:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.auto-tag{font-size:10px;color:var(--color-success);background:var(--color-success-dim);border:1px solid var(--color-success-dim);border-radius:3px;padding:1px 7px;font-family:monospace;margin-left:6px}
+.warn-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--color-warn-dim);border:1px solid var(--color-warn-dim);border-radius:8px;margin-bottom:20px;font-size:13px;color:var(--color-warn)}
 
 /* Layout */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .right-col{display:flex;flex-direction:column;gap:16px}
-.card{background:#0D1219;border:1px solid #1A2535;border-radius:8px;padding:1.25rem}
-.card-title{font-size:13px;font-weight:700;color:#FFD23F;margin-bottom:16px}
-.card-sub{font-size:11px;color:#4A6080;margin-bottom:16px;margin-top:-10px}
+.card{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;padding:1.25rem}
+.card-title{font-size:13px;font-weight:700;color:var(--color-warn);margin-bottom:16px}
+.card-sub{font-size:11px;color:var(--text-secondary);margin-bottom:16px;margin-top:-10px}
 .auto-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
 .manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
-.divider{height:1px;background:#1A2535;border:none;margin:8px 0 16px}
+.divider{height:1px;background:var(--border-color);border:none;margin:8px 0 16px}
 
 /* Fields */
 .field-group{margin-bottom:12px}
-.field-label{display:block;font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.required{color:#FF3B5C}
-.field-input{width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:6px;padding:10px 12px;color:#E2EAF4;font-size:13px;outline:none;transition:border-color .2s}
-.field-input:focus{border-color:#FFD23F}
-.field-select{width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:6px;padding:10px 12px;color:#E2EAF4;font-size:13px;outline:none;appearance:none;cursor:pointer;transition:border-color .2s}
-.field-select:focus{border-color:#FFD23F}
-.field-textarea{width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:6px;padding:10px 12px;color:#E2EAF4;font-size:13px;outline:none;resize:vertical;transition:border-color .2s}
-.field-textarea:focus{border-color:#FFD23F}
+.field-label{display:block;font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.required{color:var(--color-danger)}
+.field-input{width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:6px;padding:10px 12px;color:var(--text-primary);font-size:13px;outline:none;transition:border-color .2s}
+.field-input:focus{border-color:var(--color-warn)}
+.field-select{width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:6px;padding:10px 12px;color:var(--text-primary);font-size:13px;outline:none;appearance:none;cursor:pointer;transition:border-color .2s}
+.field-select:focus{border-color:var(--color-warn)}
+.field-textarea{width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:6px;padding:10px 12px;color:var(--text-primary);font-size:13px;outline:none;resize:vertical;transition:border-color .2s}
+.field-textarea:focus{border-color:var(--color-warn)}
 
 /* Severity */
 .severity-row{display:flex;gap:8px}
-.sev-btn{flex:1;padding:8px 4px;border-radius:6px;border:2px solid #1A2535;background:transparent;color:#4A6080;font-size:12px;font-weight:400;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif}
+.sev-btn{flex:1;padding:8px 4px;border-radius:6px;border:2px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:12px;font-weight:400;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif}
 .sev-btn.active{font-weight:700}
 
 /* Summary */
-.summary-card{border-color:#FFD23F33}
+.summary-card{border-color:var(--color-warn-dim)}
 .summary-list{display:flex;flex-direction:column}
-.summary-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #1A2535}
-.summary-key{font-size:12px;color:#4A6080}
-.summary-val{font-size:12px;font-weight:700;font-family:monospace;color:#E2EAF4}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border-color)}
+.summary-key{font-size:12px;color:var(--text-secondary)}
+.summary-val{font-size:12px;font-weight:700;font-family:monospace;color:var(--text-primary)}
 
 /* Supply */
 .supply-section{margin-top:14px}
-.supply-header{font-size:11px;color:#4A6080;font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.supply-header{font-size:11px;color:var(--text-secondary);font-family:monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
 .supply-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.supply-card{background:#060A0F;border:1px solid #4A608033;border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
-.supply-label{font-size:10px;color:#4A6080;margin-bottom:2px}
+.supply-card{background:var(--bg-body);border:1px solid var(--text-secondary)33;border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.supply-label{font-size:10px;color:var(--text-secondary);margin-bottom:2px}
 .supply-val{font-size:16px;font-weight:900;line-height:1}
-.supply-unit{font-size:10px;font-weight:400;color:#4A6080}
-.supply-empty{font-size:11px;color:#4A6080;margin-top:8px;font-style:italic}
+.supply-unit{font-size:10px;font-weight:400;color:var(--text-secondary)}
+.supply-empty{font-size:11px;color:var(--text-secondary);margin-top:8px;font-style:italic}
 .mono{font-family:monospace}
 
 /* Notice & Submit */
-.submit-notice{margin-top:14px;padding:10px 14px;background:#FFD23F08;border:1px solid #FFD23F33;border-radius:6px;font-size:12px;color:#4A6080}
-.btn-primary{background:#FFD23F;color:#060A0F;border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s;font-family:'Outfit',sans-serif;margin-top:14px}
+.submit-notice{margin-top:14px;padding:10px 14px;background:var(--color-warn-dim);border:1px solid var(--color-warn-dim);border-radius:6px;font-size:12px;color:var(--text-secondary)}
+.btn-primary{background:var(--color-warn);color:var(--bg-body);border:none;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:opacity .2s;font-family:'Outfit',sans-serif;margin-top:14px}
 .btn-primary:hover:not(:disabled){opacity:.8}
 .btn-primary:disabled{opacity:.5;cursor:not-allowed}
 .btn-primary.full-w{width:100%;justify-content:center}
-.btn-ghost{background:transparent;border:1px solid #1A2535;color:#E2EAF4;border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif}
-.btn-ghost:hover{opacity:.8}
+.btn-ghost{background:transparent;border:1px solid var(--border-color);color:var(--text-primary);border-radius:6px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .2s;font-family:'Outfit',sans-serif}
+.btn-ghost:hover{opacity:.8;background:var(--bg-body)}
 
 /* Success */
 .success-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:20px;text-align:center}
 .success-icon{font-size:64px}
-.success-title{font-size:22px;font-weight:900;color:#00E5A0}
-.success-sub{font-size:14px;color:#4A6080;max-width:440px;line-height:1.8}
-.ref-box{background:#0D1219;border:1px solid #FFD23F44;border-radius:10px;padding:1.2rem 2.5rem}
-.ref-label{font-size:10px;color:#4A6080;font-family:monospace;letter-spacing:.1em;margin-bottom:4px}
-.ref-val{font-size:24px;font-weight:900;color:#FFD23F;font-family:monospace}
+.success-title{font-size:22px;font-weight:900;color:var(--color-success)}
+.success-sub{font-size:14px;color:var(--text-secondary);max-width:440px;line-height:1.8}
+.ref-box{background:var(--bg-surface);border:1px solid var(--color-warn-dim);border-radius:10px;padding:1.2rem 2.5rem}
+.ref-label{font-size:10px;color:var(--text-secondary);font-family:monospace;letter-spacing:.1em;margin-bottom:4px}
+.ref-val{font-size:24px;font-weight:900;color:var(--color-warn);font-family:monospace}
 </style>

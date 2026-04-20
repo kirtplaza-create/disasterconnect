@@ -11,15 +11,15 @@
     <!-- Stats -->
     <div class="stat-grid">
       <div class="stat-box">
-        <div class="stat-value" style="color:#00D4FF;">{{ totalItems.toLocaleString() }}</div>
+        <div class="stat-value" style="color:var(--color-accent);">{{ totalItems.toLocaleString() }}</div>
         <div class="stat-label">Total Items in Stock</div>
       </div>
       <div class="stat-box">
-        <div class="stat-value" :style="{ color: lowCount > 0 ? '#FF3B5C' : '#00E5A0' }">{{ lowCount }}</div>
+        <div class="stat-value" :style="{ color: lowCount > 0 ? 'var(--color-danger)' : 'var(--color-success)' }">{{ lowCount }}</div>
         <div class="stat-label">Low Stock Alerts</div>
       </div>
       <div class="stat-box">
-        <div class="stat-value" style="color:#FFD23F;">{{ warehouseCount }}</div>
+        <div class="stat-value" style="color:var(--color-warn);">{{ warehouseCount }}</div>
         <div class="stat-label">Warehouse Locations</div>
       </div>
     </div>
@@ -67,11 +67,15 @@
           <tr v-for="i in inventory" :key="i.id" class="table-row">
             <td class="td mono muted">{{ i.id }}</td>
             <td class="td" style="font-weight:500;">{{ i.item }}</td>
-            <td class="td mono" style="font-size:14px;font-weight:700;" :style="{ color: i.low ? '#FF3B5C' : '#00E5A0' }">{{ (i.available || 0).toLocaleString() }}</td>
+            <td class="td mono" style="font-size:14px;font-weight:700;" :style="{ color: i.low ? 'var(--color-danger)' : 'var(--color-success)' }">{{ (i.available || 0).toLocaleString() }}</td>
             <td class="td muted">{{ i.unit }}</td>
             <td class="td">{{ i.warehouse }}</td>
             <td class="td">
-              <span class="badge" :style="i.low ? 'background:#FF3B5C18;border:1px solid #FF3B5C44;color:#FF3B5C' : 'background:#00E5A018;border:1px solid #00E5A044;color:#00E5A0'">
+              <span class="badge" :style="{
+                background: i.low ? 'color-mix(in srgb, var(--color-danger), transparent 90%)' : 'color-mix(in srgb, var(--color-success), transparent 90%)',
+                border: `1px solid ${i.low ? 'color-mix(in srgb, var(--color-danger), transparent 73%)' : 'color-mix(in srgb, var(--color-success), transparent 73%)'}`,
+                color: i.low ? 'var(--color-danger)' : 'var(--color-success)'
+              }">
                 {{ i.low ? 'LOW STOCK' : 'ADEQUATE' }}
               </span>
             </td>
@@ -104,7 +108,6 @@ async function addItem() {
   
   const qty = parseInt(form.value.available)
   
-  // Robust ID generation for real-time: find highest numeric ID or fallback to count + 1
   const maxNum = props.inventory.reduce((max, i) => {
     if (!i.id || !i.id.includes('-')) return max
     const num = parseInt(i.id.split('-')[1])
@@ -136,31 +139,31 @@ async function addItem() {
 .fade-up{animation:fadeUp .4s ease forwards}
 .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .page-title{font-size:22px;font-weight:800}
-.page-sub{color:#4A6080;font-size:13px;margin-top:4px}
+.page-sub{color:var(--text-secondary);font-size:13px;margin-top:4px}
 .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.stat-box{background:#0D1219;border:1px solid #1A2535;border-radius:6px;padding:1.2rem;text-align:center}
+.stat-box{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:6px;padding:1.2rem;text-align:center}
 .stat-value{font-size:28px;font-weight:900;font-family:'DM Mono',monospace;line-height:1;margin-bottom:4px}
-.stat-label{font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
-.form-card{background:#0D1219;border:1px solid #00D4FF44;border-radius:6px;padding:1.25rem;margin-bottom:16px}
-.form-title{font-size:14px;font-weight:700;margin-bottom:12px}
+.stat-label{font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.form-card{background:var(--bg-surface); border:1px solid color-mix(in srgb, var(--color-accent), transparent 73%); border-radius:6px; padding:1.25rem; margin-bottom:16px}
+.form-title{font-size:14px; font-weight:700; color:var(--color-accent); margin-bottom:12px}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:0 12px}
 .field{margin-bottom:12px}
-.field-label{display:block;font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.field-input{width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:4px;padding:8px 12px;color:#E2EAF4;font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
-.field-input:focus{border-color:#00D4FF}
+.field-label{display:block;font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.field-input{width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:4px;padding:8px 12px;color:var(--text-primary);font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
+.field-input:focus{border-color:var(--color-accent)}
 .field-select{appearance:none;cursor:pointer}
-.btn-primary{background:#00D4FF;color:#060A0F;border:none;border-radius:4px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;display:inline-flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif}
+.btn-primary{background:var(--color-accent);color:var(--bg-body);border:none;border-radius:4px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;display:inline-flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif}
 .btn-primary:hover{opacity:.85}
-.btn-ghost{background:transparent;border:1px solid #1A2535;color:#E2EAF4;border-radius:4px;padding:9px 20px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
-.btn-ghost:hover{border-color:#00D4FF44;color:#00D4FF}
-.card{background:#0D1219;border:1px solid #1A2535;border-radius:6px;padding:1.25rem}
+.btn-ghost{background:transparent;border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;padding:9px 20px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.btn-ghost:hover{border-color:color-mix(in srgb, var(--color-accent), transparent 73%); color:var(--color-accent)}
+.card{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:6px;padding:1.25rem}
 .table{width:100%;border-collapse:collapse}
-.table-head-row{border-bottom:1px solid #1A2535}
-.th{text-align:left;padding:8px 12px;font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;font-weight:400;letter-spacing:.06em}
-.table-row{border-bottom:1px solid #1A2535;transition:background .15s}
-.table-row:hover{background:#1A253520}
+.table-head-row{border-bottom:1px solid var(--border-color)}
+.th{text-align:left;padding:8px 12px;font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;font-weight:400;letter-spacing:.06em}
+.table-row{border-bottom:1px solid var(--border-color);transition:background .15s}
+.table-row:hover{background:color-mix(in srgb, var(--border-color), transparent 87%)}
 .td{padding:10px 12px;font-size:13px;vertical-align:middle}
 .mono{font-family:'DM Mono',monospace}
-.muted{color:#4A6080}
+.muted{color:var(--text-secondary)}
 .badge{display:inline-block;padding:2px 10px;font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.06em;border-radius:2px;font-weight:500}
 </style>

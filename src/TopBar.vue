@@ -1,10 +1,10 @@
 <template>
   <!-- TOP BAR — shown after login on every portal -->
-  <header class="topbar" :style="{ borderBottomColor: portalColor + '44' }">
+  <header class="topbar" :style="{ borderBottomColor: `color-mix(in srgb, ${portalColor}, transparent 73%)` }">
 
     <!-- LEFT: Logo + portal name -->
     <div class="topbar-left">
-      <div class="topbar-logo" :style="{ background: portalColor + '15', border: `1px solid ${portalColor}33` }">
+      <div class="topbar-logo" :style="{ background: `color-mix(in srgb, ${portalColor}, transparent 91%)`, border: `1px solid color-mix(in srgb, ${portalColor}, transparent 73%)` }">
         <component :is="portalIcon" :size="16" :color="portalColor" />
       </div>
       <div>
@@ -27,6 +27,12 @@
         <div class="topbar-usersub">{{ user.subtitle }}</div>
       </div>
 
+      <!-- Theme toggle -->
+      <button class="theme-toggle-btn" @click="toggleTheme" :title="isLightMode ? 'Switch to Dark Mode' : 'Switch to Light Mode'">
+        <Sun v-if="isLightMode" :size="16" />
+        <Moon v-else :size="16" />
+      </button>
+
       <!-- Logout button -->
       <button class="logout-btn" @click="$emit('logout')" title="Logout">
         <LogOut :size="14" />
@@ -37,8 +43,11 @@
 
 
 <script setup>
-import { computed } from 'vue'
-import { Landmark, Home, HeartHandshake, Zap, LogOut } from 'lucide-vue-next'
+import { computed, inject } from 'vue'
+import { Landmark, Home, HeartHandshake, Zap, LogOut, Sun, Moon } from 'lucide-vue-next'
+
+const isLightMode = inject('isLightMode')
+const toggleTheme = inject('toggleTheme')
 
 // ─── PROPS ────────────────────────────────────────────────────────────────────
 // Props are values passed in from the parent (App.vue)
@@ -55,13 +64,13 @@ defineEmits(['logout'])
 // ─── PORTAL CONFIG ────────────────────────────────────────────────────────────
 // Maps each portal name to its color, icon, and label
 const PORTAL_CONFIG = {
-  lgu:      { color: '#00D4FF', icon: Landmark,       label: 'LGU PORTAL' },
-  barangay: { color: '#FFD23F', icon: Home,           label: 'BARANGAY PORTAL' },
-  donor:    { color: '#00E5A0', icon: HeartHandshake, label: 'DONOR PORTAL' },
+  lgu:      { color: 'var(--color-accent)', icon: Landmark,       label: 'LGU PORTAL' },
+  barangay: { color: 'var(--color-warn)', icon: Home,           label: 'BARANGAY PORTAL' },
+  donor:    { color: 'var(--color-success)', icon: HeartHandshake, label: 'DONOR PORTAL' },
 }
 
 // These computed values read from PORTAL_CONFIG based on the current portal prop
-const portalColor = computed(() => PORTAL_CONFIG[props.portal]?.color || '#00D4FF')
+const portalColor = computed(() => PORTAL_CONFIG[props.portal]?.color || 'var(--color-accent)')
 const portalIcon  = computed(() => PORTAL_CONFIG[props.portal]?.icon  || Zap)
 const portalLabel = computed(() => PORTAL_CONFIG[props.portal]?.label || 'PORTAL')
 </script>
@@ -74,13 +83,13 @@ const portalLabel = computed(() => PORTAL_CONFIG[props.portal]?.label || 'PORTAL
   top: 0; left: 0; right: 0;
   z-index: 100;
   height: 56px;
-  background: #0D1219;
-  border-bottom: 1px solid #1A2535;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  transition: border-bottom-color 0.3s;
+  transition: all 0.3s;
 }
 
 /* LEFT SIDE */
@@ -104,7 +113,7 @@ const portalLabel = computed(() => PORTAL_CONFIG[props.portal]?.label || 'PORTAL
 }
 .topbar-portal {
   font-size: 9px;
-  color: #4A6080;
+  color: var(--text-secondary);
   font-family: 'DM Mono', monospace;
   letter-spacing: 0.1em;
 }
@@ -134,21 +143,37 @@ const portalLabel = computed(() => PORTAL_CONFIG[props.portal]?.label || 'PORTAL
 }
 .topbar-user    { text-align: right; }
 .topbar-username{ font-size: 13px; font-weight: 700; line-height: 1; margin-bottom: 1px; }
-.topbar-usersub { font-size: 10px; color: #4A6080; }
+.topbar-usersub { font-size: 10px; color: var(--text-secondary); }
+
+/* THEME TOGGLE */
+.theme-toggle-btn {
+  background: var(--border-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.theme-toggle-btn:hover {
+  background: var(--bg-body);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
 
 /* LOGOUT BUTTON */
 .logout-btn {
-  background: #1A2535;
-  border: 1px solid #1A2535;
-  color: #4A6080;
+  background: var(--border-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 5px 14px;
   border-radius: 6px;
   font-size: 12px;
   transition: all 0.2s;
 }
 .logout-btn:hover {
-  background: #FF3B5C18;
-  border-color: #FF3B5C44;
-  color: #FF3B5C;
+  background: color-mix(in srgb, var(--color-danger), transparent 91%);
+  border-color: color-mix(in srgb, var(--color-danger), transparent 73%);
+  color: var(--color-danger);
 }
 </style>

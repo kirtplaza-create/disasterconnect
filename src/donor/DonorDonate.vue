@@ -1,8 +1,8 @@
 <template>
   <!-- Success screen -->
   <div v-if="submitted" class="fade-up success-screen">
-    <div class="float" style="margin-bottom: 20px;"><Heart :size="64" color="#00E5A0" fill="#00E5A0" /></div>
-    <div style="font-size:24px;font-weight:900;color:#00E5A0;">Thank You for Donating!</div>
+    <div class="float" style="margin-bottom: 20px;"><Heart :size="64" color="var(--color-success)" fill="var(--color-success)" /></div>
+    <div style="font-size:24px;font-weight:900;color:var(--color-success);">Thank You for Donating!</div>
     <div class="success-sub">Your donation has been logged and will be verified by the LGU Operations Center. You can track its status in "My Donations".</div>
     <div class="ref-box">
       <div class="ref-label">YOUR DONATION REFERENCE</div>
@@ -98,8 +98,8 @@ const form = ref(blankForm())
 
 watch(() => props.donateForReport, v => { if (v) form.value.reportId = v })
 
-const focus = e => e.target.style.borderColor = '#00E5A0'
-const blur  = e => e.target.style.borderColor = '#1A2535'
+const focus = e => e.target.style.borderColor = 'var(--color-success)'
+const blur  = e => e.target.style.borderColor = 'var(--border-color)'
 
 async function submitDonation() {
   if (!form.value.donorName) return alert('Your name is required.')
@@ -136,28 +136,28 @@ async function submitDonation() {
 .fade-up{animation:fadeUp .4s ease forwards}
 .float{animation:float 3s ease-in-out infinite;display:inline-block}
 .success-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:20px;text-align:center}
-.success-sub{font-size:14px;color:#4A6080;max-width:440px;line-height:1.8}
-.ref-box{background:#0D1219;border:1px solid #00E5A044;border-radius:10px;padding:1.2rem 2rem;text-align:center}
-.ref-label{font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;margin-bottom:4px}
-.ref-id{font-size:22px;font-weight:900;color:#00E5A0;font-family:'DM Mono',monospace}
-.portal-label{font-size:10px;color:#00E5A0;font-family:'DM Mono',monospace;letter-spacing:.12em;margin-bottom:4px}
+.success-sub{font-size:14px;color:var(--text-secondary);max-width:440px;line-height:1.8}
+.ref-box{background:var(--bg-surface);border:1px solid color-mix(in srgb, var(--color-success), transparent 73%);border-radius:10px;padding:1.2rem 2rem;text-align:center}
+.ref-label{font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;margin-bottom:4px}
+.ref-id{font-size:22px;font-weight:900;color:var(--color-success);font-family:'DM Mono',monospace}
+.portal-label{font-size:10px;color:var(--color-success);font-family:'DM Mono',monospace;letter-spacing:.12em;margin-bottom:4px}
 .page-title{font-size:22px;font-weight:900}
-.page-sub{color:#4A6080;font-size:13px;margin-top:4px}
+.page-sub{color:var(--text-secondary);font-size:13px;margin-top:4px}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{background:#0D1219;border:1px solid #1A2535;border-radius:8px;padding:1.25rem}
-.card-title{font-size:14px;font-weight:700;margin-bottom:14px;color:#00E5A0}
+.card{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:8px;padding:1.25rem}
+.card-title{font-size:14px;font-weight:700;margin-bottom:14px;color:var(--color-success)}
 .field{margin-bottom:12px}
-.field-label{display:block;font-size:11px;color:#4A6080;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.field-input{width:100%;background:#060A0F;border:1px solid #1A2535;border-radius:6px;padding:10px 12px;color:#E2EAF4;font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
+.field-label{display:block;font-size:11px;color:var(--text-secondary);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.field-input{width:100%;background:var(--bg-body);border:1px solid var(--border-color);border-radius:6px;padding:10px 12px;color:var(--text-primary);font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
 .field-select{appearance:none;cursor:pointer}
 .item-row{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center}
-.remove-btn{background:#FF3B5C18;border:1px solid #FF3B5C44;color:#FF3B5C;border-radius:4px;padding:6px 10px;font-size:12px;cursor:pointer}
-.add-item-btn{background:none;border:1px dashed #1A2535;color:#4A6080;border-radius:4px;padding:6px 16px;font-size:12px;cursor:pointer;width:100%;margin-top:4px}
-.add-item-btn:hover{border-color:#00E5A044;color:#00E5A0}
-.quick-btn{background:#060A0F;border:1px solid #1A2535;color:#4A6080;padding:5px 12px;font-size:11px;border-radius:4px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
-.quick-btn:hover{border-color:#00E5A044;color:#00E5A0}
-.btn-primary{background:#00E5A0;color:#060A0F;border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif;transition:opacity .2s}
+.remove-btn{background:color-mix(in srgb, var(--color-danger), transparent 90%);border:1px solid color-mix(in srgb, var(--color-danger), transparent 73%);color:var(--color-danger);border-radius:4px;padding:6px 10px;font-size:12px;cursor:pointer}
+.add-item-btn{background:none;border:1px dashed var(--border-color);color:var(--text-secondary);border-radius:4px;padding:6px 16px;font-size:12px;cursor:pointer;width:100%;margin-top:4px}
+.add-item-btn:hover{border-color:color-mix(in srgb, var(--color-success), transparent 73%);color:var(--color-success)}
+.quick-btn{background:var(--bg-body);border:1px solid var(--border-color);color:var(--text-secondary);padding:5px 12px;font-size:11px;border-radius:4px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.quick-btn:hover{border-color:color-mix(in srgb, var(--color-success), transparent 73%);color:var(--color-success)}
+.btn-primary{background:var(--color-success);color:var(--bg-body);border:none;border-radius:6px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif;transition:opacity .2s}
 .btn-primary:hover{opacity:.85}
-.btn-ghost{background:transparent;border:1px solid #1A2535;color:#E2EAF4;border-radius:6px;padding:10px 20px;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
-.btn-ghost:hover{border-color:#00E5A044;color:#00E5A0}
+.btn-ghost{background:transparent;border:1px solid var(--border-color);color:var(--text-primary);border-radius:6px;padding:10px 20px;font-size:13px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
+.btn-ghost:hover{border-color:color-mix(in srgb, var(--color-success), transparent 73%);color:var(--color-success)}
 </style>
