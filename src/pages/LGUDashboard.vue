@@ -920,7 +920,6 @@ async function runNeedsInline(r) {
 .n-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
 .n-title { font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .n-actor { font-size: 9px; padding: 2px 6px; background: color-mix(in srgb, var(--color-accent), transparent 93%); color: var(--color-accent); border: 1px solid color-mix(in srgb, var(--color-accent), transparent 80%); border-radius: 4px; font-family: 'DM Mono', monospace; }
-.n-body { }
 .n-info { font-size: 12px; line-height: 1.5; color: var(--text-dim); margin-bottom: 6px; }
 .n-lbl { font-weight: 700; color: var(--text-secondary); }
 .t-danger { color: var(--color-danger); }
@@ -967,9 +966,11 @@ async function runNeedsInline(r) {
 .step-text-premium { font-size: 12.5px; color: var(--text-primary); line-height: 1.5; }
 
 .gap-card-premium { display: flex; align-items: center; background: var(--color-danger)0a; border: 1px solid var(--color-danger)22; border-radius: 6px; padding: 10px 16px; margin-bottom: 6px; }
-.classification-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 16px; background: var(--bg-body); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); }
-.class-item { font-size: 12.5px; line-height: 1.5; color: var(--text-primary); display: flex; gap: 8px; }
-.class-key { font-weight: 800; color: var(--color-accent); text-transform: uppercase; font-size: 10px; font-family: 'DM Mono', monospace; white-space: nowrap; margin-top: 2px; }
-.class-val { color: var(--text-dim); }
+.classification-grid { display: flex; flex-direction: column; gap: 0; margin-bottom: 24px; background: var(--bg-surface); padding: 0; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+.class-item { display: grid; grid-template-columns: 240px 1fr; column-gap: 40px; padding: 18px 24px; border-bottom: 1px solid var(--border-color); transition: background 0.2s; }
+.class-item:hover { background: color-mix(in srgb, var(--color-accent), transparent 98%); }
+.class-item:last-child { border-bottom: none; }
+.class-key { font-weight: 800; color: var(--color-accent); text-transform: uppercase; font-size: 10px; font-family: 'Outfit', sans-serif; letter-spacing: 0.08em; line-height: 1.5; padding-top: 2px; }
+.class-val { color: var(--text-primary); font-size: 13.5px; line-height: 1.6; font-weight: 500; }
 
 </style>

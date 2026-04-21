@@ -50,15 +50,15 @@ body.light-mode {
   --bg-input: #F1F5F9;
   --border-color: #E2E8F0;
   --border-color-rgb: 226, 232, 240;
-  --text-primary: #0F172A;
-  --text-primary-rgb: 15, 23, 42;
-  --text-secondary: #475569;
-  --text-secondary-rgb: 71, 85, 105;
-  --text-dim: #64748B;
-  --text-dim-rgb: 100, 116, 139;
-  --accent-glow: rgba(14, 165, 233, 0.05);
+  --text-primary: #000000;
+  --text-primary-rgb: 0, 0, 0;
+  --text-secondary: #000000;
+  --text-secondary-rgb: 0, 0, 0;
+  --text-dim: #000000;
+  --text-dim-rgb: 0, 0, 0;
+  --accent-glow: rgba(0, 212, 255, 0.02);
   --scrollbar-track: #F8FAFC;
-  --scrollbar-thumb: #CBD5E1;
+  --scrollbar-thumb: #E2E8F0;
 
   /* FUNCTIONAL COLORS (LIGHT) */
   --color-accent: #0ea5e9;

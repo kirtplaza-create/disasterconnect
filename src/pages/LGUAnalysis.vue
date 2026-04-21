@@ -684,8 +684,10 @@ async function approveReport() {
 .btn-approve { background: var(--color-success); color: var(--bg-body); border: none; border-radius: 4px; padding: 14px 32px; font-size: 14px; font-weight: 800; cursor: pointer; width: 100%; transition: opacity 0.2s; }
 .btn-approve:disabled { opacity:0.5; }
 
-.classification-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 24px; background: var(--bg-body); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); }
-.class-item { font-size: 13px; line-height: 1.6; color: var(--text-primary); display: flex; gap: 10px; }
-.class-key { font-weight: 800; color: var(--color-accent); text-transform: uppercase; font-size: 10.5px; font-family: 'DM Mono', monospace; white-space: nowrap; margin-top: 2px; }
-.class-val { color: var(--text-secondary); }
+.classification-grid { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; background: var(--bg-surface); padding: 0; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+.class-item { display: grid; grid-template-columns: 240px 1fr; column-gap: 40px; padding: 20px 24px; border-bottom: 1px solid var(--border-color); transition: background 0.2s; }
+.class-item:hover { background: color-mix(in srgb, var(--color-accent), transparent 98%); }
+.class-item:last-child { border-bottom: none; }
+.class-key { font-weight: 800; color: var(--color-accent); text-transform: uppercase; font-size: 10.5px; font-family: 'Outfit', sans-serif; letter-spacing: 0.1em; line-height: 1.5; padding-top: 2px; }
+.class-val { color: var(--text-primary); font-size: 14px; line-height: 1.7; font-weight: 500; }
 </style>

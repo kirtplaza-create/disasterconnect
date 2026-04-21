@@ -121,66 +121,49 @@ const NAV_ITEMS = [
 .sidebar-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 1.5rem 1.25rem;
+  gap: 10px;
+  padding: 1.25rem;
   border-bottom: 1px solid var(--border-color);
-  position: relative;
 }
 .logo-icon {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent), transparent 85%), color-mix(in srgb, var(--color-accent), transparent 95%));
-  border: 1px solid color-mix(in srgb, var(--color-accent), transparent 70%);
-  border-radius: 10px;
+  width: 32px; height: 32px;
+  background: color-mix(in srgb, var(--color-accent), transparent 91%);
+  border: 1px solid color-mix(in srgb, var(--color-accent), transparent 73%);
+  border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-accent), transparent 90%);
-  transition: all 0.3s ease;
-}
-.sidebar-logo:hover .logo-icon {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--color-accent), transparent 80%);
-  border-color: var(--color-accent);
 }
 .logo-name {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 900;
-  background: linear-gradient(to right, var(--color-accent), color-mix(in srgb, var(--color-accent), white 30%));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-accent);
   line-height: 1;
-  margin-bottom: 3px;
-  letter-spacing: -0.01em;
+  margin-bottom: 2px;
 }
 .logo-sub {
   font-size: 9px;
   color: var(--text-secondary);
   font-family: 'DM Mono', monospace;
-  letter-spacing: 0.1em;
-  font-weight: 600;
-  opacity: 0.8;
+  letter-spacing: 0.07em;
 }
 .theme-toggle {
   background: var(--bg-body);
   border: 1px solid var(--border-color);
   color: var(--text-secondary);
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-left: auto;
+  transition: all 0.2s ease;
 }
 .theme-toggle:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
   background: var(--color-accent-dim);
-  transform: rotate(15deg) scale(1.1);
-}
-.theme-toggle:active {
-  transform: scale(0.95);
 }
 
 /* ── LIVE STATUS ── */
