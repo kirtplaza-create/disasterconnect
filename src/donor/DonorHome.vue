@@ -5,7 +5,7 @@
       <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:color-mix(in srgb, var(--color-success), transparent 97%);pointer-events:none;"></div>
       <div class="hero-icon float"><Heart :size="48" color="var(--color-success)" fill="var(--color-success)" /></div>
       <div class="hero-title">Every Donation Saves Lives</div>
-      <div class="hero-sub">Your generosity directly reaches affected families in Davao Region. Track exactly where your donations go — from your hands to their hands.</div>
+      <div class="hero-sub">Your generosity directly reaches affected families in Caraga Region. Track exactly where your donations go — from your hands to their hands.</div>
       <div class="hero-btns">
         <button class="btn-primary" @click="$emit('navigate','donor-donate')"><HeartHandshake :size="18" /> Donate Now</button>
         <button class="btn-outline" @click="$emit('navigate','donor-disasters')"><CloudLightning :size="18" /> See Active Disasters</button>

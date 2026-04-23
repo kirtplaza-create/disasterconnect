@@ -14,7 +14,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const BRGY = "Brgy Riverside";
-const MUNI = "Davao City";
+const MUNI = "Butuan City";
 
 const familyNames = [
     "HAYA", "SANTOS", "REYES", "CRUZ", "BAUTISTA", "GARCIA", "LOPEZ", "PASCUAL", "TORRES", "MENDEZ",

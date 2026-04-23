@@ -211,7 +211,7 @@ const done         = ref(false)
 const submittedRef = ref('')
 const today        = new Date().toISOString().split('T')[0]
 const form = reactive({
-  barangay: props.user.name || 'Barangay Riverside', municipality: props.user.muni || 'Davao City',
+  barangay: props.user.name || 'Barangay Riverside', municipality: props.user.muni || 'Butuan City',
   dtype:'Flood', severity:'Moderate', evacuees:'', injured:'', date:today, desc:''
 })
 

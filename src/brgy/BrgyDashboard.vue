@@ -168,7 +168,7 @@ defineEmits(['navigate', 'add-family'])
 
 // ── Computed ──────────────────────────────────────────────────────────────────
 const totalFamilies = computed(() => props.residents.length)
-const totalMembers  = computed(() => props.residents.reduce((s,r) => s + r.members.length, 0))
+const totalMembers  = computed(() => props.residents.reduce((s,r) => s + (r.members ? r.members.length : 0), 0))
 const vulnerable    = computed(() => props.residents.filter(r => r.vulnerableGroups && r.vulnerableGroups.length > 0).length)
 
 const statusRows = computed(() => [

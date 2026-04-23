@@ -111,8 +111,8 @@ const toggleTheme = inject('toggleTheme')
 const emit = defineEmits(['login'])
 
 const PORTALS = [
-  { role:'lgu',      name:'LGU Operations Center Portal',   subtitle:'Davao City DRRMO', icon: Landmark, color:'var(--color-accent)' },
-  { role:'barangay', name:'Barangay Portal',  subtitle:'Davao City',       icon: Home, color:'var(--color-warn)' },
+  { role:'lgu',      name:'LGU Operations Center Portal',   subtitle:'Butuan CDRRMD', icon: Landmark, color:'var(--color-accent)' },
+  { role:'barangay', name:'Barangay Portal',  subtitle:'Butuan City',       icon: Home, color:'var(--color-warn)' },
   { role:'donor',    name:'Donor / Volunteer Portal',        subtitle:'Public Portal',    icon: HeartHandshake, color:'var(--color-success)' },
 ]
 

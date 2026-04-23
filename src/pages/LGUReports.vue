@@ -24,7 +24,7 @@
         </div>
         <div class="field">
           <label class="field-label">Municipality</label>
-          <input v-model="form.muni" class="field-input" placeholder="e.g. Davao City" />
+          <input v-model="form.muni" class="field-input" placeholder="e.g. Butuan City" />
         </div>
       </div>
 

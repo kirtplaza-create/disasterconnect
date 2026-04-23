@@ -445,8 +445,8 @@
           </div>
           <div class="f-main">
             <div class="f-name-row">
-              <span class="f-surname">{{ f.familyName }}</span>
-              <span class="f-id">#{{ f.id.slice(-4) }}</span>
+              <span class="f-surname">{{ f.familyName || f.name || 'Unnamed Family' }}</span>
+              <span class="f-id">#{{ (f.id || '').slice(-4) }}</span>
             </div>
             <div class="f-contact">{{ f.contactNo || 'No contact saved' }}</div>
           </div>
@@ -457,7 +457,7 @@
 
         <div class="f-card-mid">
           <div class="f-stat-item">
-            <span class="f-stat-val">{{ f.members.length }}</span>
+            <span class="f-stat-val">{{ (f.members || []).length }}</span>
             <span class="f-stat-lbl">Members</span>
           </div>
           <div class="f-stat-divider"></div>
