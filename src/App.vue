@@ -8,7 +8,7 @@
     :deliveries="deliveries"
     :donations="donations"
     :inventory="inventory"
-    @logout="handleLogout"
+    @logout="isLogoutModalOpen = true"
   />
 
   <BarangayPortal
@@ -17,7 +17,7 @@
     :residents="residents"
     :reports="reports"
     :deliveries="deliveries"
-    @logout="handleLogout"
+    @logout="isLogoutModalOpen = true"
   />
 
   <DonorPortal
@@ -25,8 +25,25 @@
     :user="session.user"
     :reports="reports"
     :donations="donations"
-    @logout="handleLogout"
+    @logout="isLogoutModalOpen = true"
   />
+
+  <!-- Logout Confirmation Modal -->
+  <Transition name="fade">
+    <div v-if="isLogoutModalOpen" class="logout-overlay" @click.self="isLogoutModalOpen = false">
+      <div class="logout-modal">
+        <div class="logout-modal-icon">
+          <LogOut :size="32" />
+        </div>
+        <h3 class="logout-modal-title">Confirm Logout</h3>
+        <p class="logout-modal-text">Are you sure you want to log out? Any unsaved changes might be lost.</p>
+        <div class="logout-modal-actions">
+          <button class="logout-btn-cancel" @click="isLogoutModalOpen = false">Cancel</button>
+          <button class="logout-btn-confirm" @click="handleLogout">Log Out</button>
+        </div>
+      </div>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -39,9 +56,11 @@ import LoginScreen    from './LoginScreen.vue'
 import LGUPortal      from './LGUPortal.vue'
 import BarangayPortal from './BarangayPortal.vue'
 import DonorPortal    from './DonorPortal.vue'
+import { LogOut }     from 'lucide-vue-next'
 
 const session = ref(null)
 const loadingAuth = ref(true)
+const isLogoutModalOpen = ref(false)
 
 // THEME MANAGEMENT
 const isLightMode = ref(localStorage.getItem('theme') === 'light')
@@ -126,6 +145,7 @@ function handleLogin() {
 }
 
 async function handleLogout() {
+  isLogoutModalOpen.value = false;
   await signOut(auth);
   session.value = null;
 }
@@ -146,4 +166,53 @@ button { cursor: pointer; }
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background: var(--scrollbar-track)}
 ::-webkit-scrollbar-thumb{background: var(--scrollbar-thumb);border-radius:2px}
-</style>
+
+/* LOGOUT MODAL STYLES */
+.logout-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.logout-modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  width: 100%; max-width: 400px;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  animation: modalScale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.logout-modal-icon {
+  width: 64px; height: 64px; border-radius: 20px;
+  background: color-mix(in srgb, var(--color-warn), transparent 90%);
+  color: var(--color-warn);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+}
+.logout-modal-title { font-size: 20px; font-weight: 900; margin-bottom: 12px; color: var(--text-primary); }
+.logout-modal-text { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.6; }
+.logout-modal-actions { display: flex; gap: 12px; }
+.logout-btn-cancel {
+  flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color);
+  background: transparent; color: var(--text-secondary); font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+}
+.logout-btn-cancel:hover { background: var(--bg-body); color: var(--text-primary); }
+.logout-btn-confirm {
+  flex: 1; padding: 12px; border-radius: 12px; border: none;
+  background: var(--color-warn); color: var(--bg-body); font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+}
+.logout-btn-confirm:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>
